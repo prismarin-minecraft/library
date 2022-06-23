@@ -19,7 +19,7 @@ steps:
       serverSecrets:
         from_secret: NEXUS_CREDENTIALS
   - name: test
-    image: maven
+    image: maven:3.8.6-eclipse-temurin-17-alpine
     commands:
       - mvn test -B -s settings.xml
 
@@ -44,6 +44,6 @@ steps:
       serverSecrets:
         from_secret: NEXUS_CREDENTIALS
   - name: test & deploy
-    image: maven
+    image: maven:3.8.6-eclipse-temurin-17-alpine
     commands:
       - mvn deploy -B -s settings.xml
