@@ -1,0 +1,49 @@
+---
+kind: pipeline
+type: docker
+name: Pull request
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+
+steps:
+  - name: nexus authentication
+    image: md5lukas/drone-mvn-settings
+    settings:
+      servers:
+        - id: prismarin
+          username: admin
+      serverSecrets:
+        from_secret: NEXUS_CREDENTIALS
+  - name: test
+    image: maven
+    commands:
+      - mvn test -B -s settings.xml
+
+---
+kind: pipeline
+type: docker
+name: Deployment
+
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
+steps:
+  - name: nexus authentication
+    image: md5lukas/drone-mvn-settings
+    settings:
+      servers:
+        - id: prismarin
+          username: admin
+      serverSecrets:
+        from_secret: NEXUS_CREDENTIALS
+  - name: test & deploy
+    image: maven
+    commands:
+      - mvn deploy -B -s settings.xml
