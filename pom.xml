@@ -15,6 +15,7 @@
         <module>authentication</module>
         <module>vault</module>
         <module>web</module>
+        <module>spigot</module>
     </modules>
 
     <properties>

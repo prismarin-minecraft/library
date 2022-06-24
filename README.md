@@ -39,6 +39,7 @@ Replace `{MODULE}` with:
 <li>file</li>
 <li>vault</li>
 <li>web</li>
+<li>spigot</li>
 </ul>
 
 ### Author
