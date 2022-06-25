@@ -30,7 +30,7 @@ public class HashiCorpVaultAdapter implements VaultProvider {
 
     @Override
     public @Nullable String getSecret(String key) {
-        Map<String, String> secrets = getStore("configuration");
+        Map<String, String> secrets = getStore("secrets");
         if(secrets != null) {
             return secrets.get(key);
         }
@@ -39,7 +39,7 @@ public class HashiCorpVaultAdapter implements VaultProvider {
 
     @Override
     public @Nullable String getConfiguration(String key) {
-        Map<String, String> secrets = getStore("secrets");
+        Map<String, String> secrets = getStore("configuration");
         if(secrets != null) {
             return secrets.get(key);
         }
