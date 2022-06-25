@@ -16,6 +16,7 @@
         <module>vault</module>
         <module>web</module>
         <module>spigot</module>
+        <module>all</module>
     </modules>
 
     <properties>
