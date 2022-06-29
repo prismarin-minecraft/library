@@ -25,10 +25,10 @@ public abstract class SpigotCommand<T extends CommandSender> extends CommandNode
     public boolean execute(T sender, String[] args) {
          try {
              if(!hasSenders()) {
-                 throw new SenderException("Senders are missing");
+                 throw new SenderException("Senders are missing", null);
              }
              if(!isSender(sender.getClass())) {
-                 throw new SenderException("Wrong sender");
+                 throw new SenderException("Wrong sender", sender);
              }
              if(hasPermission()) {
                 if(!sender.hasPermission(getPermission())) {

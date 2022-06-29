@@ -1,6 +1,8 @@
 package in.prismar.library.spigot.command.exception.impl;
 
 import in.prismar.library.spigot.command.exception.CommandException;
+import lombok.Getter;
+import org.bukkit.command.CommandSender;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -8,10 +10,14 @@ import in.prismar.library.spigot.command.exception.CommandException;
  * Proprietary and confidential
  * Written by Maga
  **/
+@Getter
 public class SenderException extends CommandException {
 
-    public SenderException(String message) {
+    private CommandSender sender;
+
+    public SenderException(String message, CommandSender sender) {
         super(message);
+        this.sender = sender;
     }
 
 }

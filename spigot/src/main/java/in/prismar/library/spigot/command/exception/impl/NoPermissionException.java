@@ -1,7 +1,7 @@
 package in.prismar.library.spigot.command.exception.impl;
 
+import in.prismar.library.spigot.command.exception.CommandException;
 import lombok.Getter;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 
 /**

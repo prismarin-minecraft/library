@@ -395,5 +395,35 @@ public class MathUtil {
 		return (int) (Math.random() < 0.5 ? ((1 - Math.random()) * (max - min) + min) : (Math.random() * (max - min) + min));
 	}
 
+	/**
+	 * Check if text is a Integer
+	 *
+	 * @param text
+	 * @return
+	 */
+	public static boolean isInteger(String text) {
+		try {
+			Integer.valueOf(text);
+			return true;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+
+	/**
+	 * Check if text is a Long
+	 *
+	 * @param text
+	 * @return
+	 */
+	public static boolean isLong(String text) {
+		try {
+			Long.valueOf(text);
+			return true;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+
 
 }

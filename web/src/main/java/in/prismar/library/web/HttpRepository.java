@@ -44,9 +44,10 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
                 .header("Authorization", token)
                 .put(body)
                 .build();
-        try (Response ignored = client.newCall(request).execute()) {
+        try (Response response = client.newCall(request).execute()) {
             return entity;
         } catch (Exception e) {
+            e.printStackTrace();
             return entity;
         }
     }
@@ -59,7 +60,10 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
                 .get()
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            return gson.fromJson(response.body().string(), entityClass);
+            if(response.code() == 200) {
+                return gson.fromJson(response.body().string(), entityClass);
+            }
+            return null;
         } catch (Exception e) {
             return null;
         }
