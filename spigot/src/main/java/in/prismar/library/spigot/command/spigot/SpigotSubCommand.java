@@ -26,7 +26,7 @@ public abstract class SpigotSubCommand<T extends CommandSender> extends CommandC
     public boolean execute(T sender, SpigotArguments arguments) throws CommandException {
         if(hasPermission()) {
             if(!sender.hasPermission(getPermission())) {
-                throw new NoPermissionException(sender);
+                throw new NoPermissionException();
             }
         }
         Optional<CommandChildNode<T, SpigotArguments>> childOptional = retrieveChild(arguments);

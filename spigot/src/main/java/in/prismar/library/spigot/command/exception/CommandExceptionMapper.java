@@ -1,5 +1,7 @@
 package in.prismar.library.spigot.command.exception;
 
+import org.bukkit.command.CommandSender;
+
 /**
  * Copyright (c) Maga, All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -8,5 +10,5 @@ package in.prismar.library.spigot.command.exception;
  **/
 public interface CommandExceptionMapper {
 
-    void map(CommandException exception);
+    void map(CommandSender sender, CommandException exception);
 }

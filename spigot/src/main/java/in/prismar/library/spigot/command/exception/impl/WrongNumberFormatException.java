@@ -10,11 +10,13 @@ import lombok.Getter;
  * Written by Maga
  **/
 @Getter
-public class NoPermissionException extends CommandException {
+public class WrongNumberFormatException extends CommandException {
 
+    private final String input;
 
-    public NoPermissionException() {
-        super("Sender does not have enough permission");
+    public WrongNumberFormatException(String input) {
+        super("Wrong format: " + input);
+        this.input = input;
     }
 
 }

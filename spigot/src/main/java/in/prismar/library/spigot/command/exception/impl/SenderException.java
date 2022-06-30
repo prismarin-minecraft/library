@@ -13,11 +13,8 @@ import org.bukkit.command.CommandSender;
 @Getter
 public class SenderException extends CommandException {
 
-    private CommandSender sender;
-
-    public SenderException(String message, CommandSender sender) {
+    public SenderException(String message) {
         super(message);
-        this.sender = sender;
     }
 
 }

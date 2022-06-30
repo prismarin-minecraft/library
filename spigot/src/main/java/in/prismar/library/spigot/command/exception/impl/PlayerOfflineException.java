@@ -10,11 +10,13 @@ import lombok.Getter;
  * Written by Maga
  **/
 @Getter
-public class NoPermissionException extends CommandException {
+public class PlayerOfflineException extends CommandException {
 
+    private final String input;
 
-    public NoPermissionException() {
-        super("Sender does not have enough permission");
+    public PlayerOfflineException(String input) {
+        super("Player " + input + " is not online");
+        this.input = input;
     }
 
 }
