@@ -1,6 +1,5 @@
 package in.prismar.library.spigot.setup;
 
-import com.google.common.collect.Lists;
 import in.prismar.library.spigot.command.spigot.SpigotCommand;
 import in.prismar.library.spigot.command.spigot.SpigotCommandListener;
 import lombok.Getter;
@@ -14,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,8 +31,8 @@ public class SpigotSetup {
     public SpigotSetup(@NonNull Plugin plugin, String prefix) {
         this.plugin = plugin;
         this.prefix = prefix;
-        this.commands = Lists.newArrayList();
-        this.listeners = Lists.newArrayList();
+        this.commands = new ArrayList<>();
+        this.listeners = new ArrayList<>();
     }
 
     /**

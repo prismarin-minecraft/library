@@ -2,7 +2,6 @@ package in.prismar.library.spigot.command;
 
 import in.prismar.library.spigot.command.exception.CommandExceptionMapper;
 
-import javax.annotation.Nullable;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -18,7 +17,6 @@ public final class CommandFactory {
         DEFAULT_EXCEPTION_MAPPER = mapper;
     }
 
-    @Nullable
     public static CommandExceptionMapper getDefaultExceptionMapper() {
         return DEFAULT_EXCEPTION_MAPPER;
     }
