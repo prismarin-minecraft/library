@@ -10,6 +10,8 @@ import org.bukkit.plugin.PluginManager;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -24,12 +26,14 @@ public class FrameBootstrap {
     private static FrameBootstrap instance;
 
     private final Plugin plugin;
-
     private Map<UUID, Frame> frames;
+
+    private ExecutorService threadPool;
 
     public FrameBootstrap(Plugin plugin) {
         this.plugin = plugin;
         this.frames = new ConcurrentHashMap<>();
+        this.threadPool = Executors.newCachedThreadPool();
         instance = this;
     }
 

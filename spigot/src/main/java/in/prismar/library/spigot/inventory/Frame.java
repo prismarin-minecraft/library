@@ -25,31 +25,20 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 public class Frame {
 
-    private String title;
-    private int rows;
-    private boolean async;
+    private FrameProperties properties;
     private Map<Integer, FrameButton> buttons;
-
+    private EventBus eventBus;
     private Inventory output;
 
-    private EventBus eventBus;
-
     public Frame(String title, int rows) {
-        this.title = title;
-        this.rows = rows;
-        this.async = false;
+        this.properties = new FrameProperties(title, rows);
         this.buttons = new HashMap<>();
         this.eventBus = new EventBus();
     }
 
-    public Frame async() {
-        this.async = true;
-        return this;
-    }
-
     public Frame fillInventory(Material filling) {
         ItemStack item = new ItemBuilder(filling).setName(" ").build();
-        for (int i = 0; i < rows * 9; i++) {
+        for (int i = 0; i < properties.getRows() * 9; i++) {
             addButton(i, item);
         }
         return this;
@@ -68,7 +57,7 @@ public class Frame {
         return addButton(slot, new FrameButton(stack).addEvents(events));
     }
 
-    public Frame clearButtons(int... slots) {
+    protected Frame clearButtons(int... slots) {
         for(int slot : slots) {
             this.buttons.remove(slot);
             if(isBuild()) {
@@ -78,7 +67,7 @@ public class Frame {
         return this;
     }
 
-    public Frame clearButtons() {
+    protected Frame clearButtons() {
         for(int slot : getButtons().keySet()) {
             this.buttons.remove(slot);
             if(isBuild()) {
@@ -88,18 +77,20 @@ public class Frame {
         return this;
     }
 
-    public Frame buildButtons() {
+    protected void placeItems() {
+        for(Map.Entry<Integer, FrameButton> entry : this.buttons.entrySet()) {
+            output.setItem(entry.getKey(), entry.getValue().getItem());
+        }
+    }
+
+    protected Frame buildButtons() {
         if(isBuild()) {
-            if(async) {
-                CompletableFuture.runAsync(() -> {
-                    for(Map.Entry<Integer, FrameButton> entry : this.buttons.entrySet()) {
-                        output.setItem(entry.getKey(), entry.getValue().getItem());
-                    }
+            if(getProperties().isAsync()) {
+                FrameBootstrap.getInstance().getThreadPool().submit(() -> {
+                    placeItems();
                 });
             } else {
-                for(Map.Entry<Integer, FrameButton> entry : this.buttons.entrySet()) {
-                    output.setItem(entry.getKey(), entry.getValue().getItem());
-                }
+                placeItems();
             }
         }
         return this;
@@ -126,7 +117,7 @@ public class Frame {
     }
 
     public Inventory build() {
-        output = Bukkit.createInventory(null, rows * 9, title);
+        output = Bukkit.createInventory(null, properties.getRows() * 9, properties.getTitle());
         buildButtons();
         return output;
     }

@@ -16,7 +16,6 @@ public class FrameButton {
 
     private ItemStack item;
     private FrameButtonEvent[] events;
-
     private boolean cancelClick = true;
 
     public FrameButton(ItemStack item) {
