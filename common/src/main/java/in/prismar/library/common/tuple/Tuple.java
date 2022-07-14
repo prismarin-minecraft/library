@@ -16,5 +16,5 @@ import lombok.NoArgsConstructor;
 public class Tuple<T, K> {
 
     private T first;
-    private T second;
+    private K second;
 }

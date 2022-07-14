@@ -1,7 +1,7 @@
-package in.prismar.library.common.tuple;
+package in.prismar.library.spigot.hologram.placeholder;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -9,10 +9,11 @@ import lombok.Data;
  * Proprietary and confidential
  * Written by Maga
  **/
-@Data
+@Getter
 @AllArgsConstructor
-public class ImmutableTuple<T, K> {
+public class HologramPlaceholder {
 
-    private final T first;
-    private final K second;
+    private final String key;
+    private final HologramPlaceholderValue replacer;
+
 }
