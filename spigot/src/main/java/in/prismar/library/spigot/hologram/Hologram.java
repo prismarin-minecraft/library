@@ -1,12 +1,13 @@
 package in.prismar.library.spigot.hologram;
 
+import in.prismar.library.spigot.hologram.placeholder.HologramPlaceholder;
+import lombok.Getter;
+import lombok.Setter;
 import in.prismar.library.common.tuple.Tuple;
 import in.prismar.library.spigot.hologram.line.HologramLine;
 import in.prismar.library.spigot.hologram.line.HologramLineType;
 import in.prismar.library.spigot.hologram.placeholder.HologramPlaceholder;
 import in.prismar.library.spigot.hologram.placeholder.HologramPlaceholderValue;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

@@ -13,8 +13,5 @@ import java.util.Map;
 public interface VaultProvider {
 
     @Nullable
-    String getSecret(String key);
-
-    @Nullable
-    String getConfiguration(String key);
+    String getSecret(String category, String key);
 }

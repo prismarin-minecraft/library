@@ -1,21 +1,22 @@
 package in.prismar.library.spigot.hologram.line;
 
 import com.mojang.datafixers.util.Pair;
-import in.prismar.library.common.tuple.Tuple;
 import lombok.Getter;
-import net.minecraft.network.chat.ChatComponentText;
+import net.minecraft.network.chat.ChatMessageContent;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
-import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
-import net.minecraft.world.entity.EnumItemSlot;
-import net.minecraft.world.entity.decoration.EntityArmorStand;
-import net.minecraft.world.level.World;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.Level;
+import in.prismar.library.common.tuple.Tuple;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,11 +32,11 @@ import java.util.List;
 @Getter
 public class HologramLine {
 
-    private EntityArmorStand stand;
+    private ArmorStand stand;
     private final Location startLocation;
     private HologramLineType type;
     private Object content;
-    private final List<Tuple<EnumItemSlot, ItemStack>> equipment;
+    private final List<Tuple<EquipmentSlot, ItemStack>> equipment;
 
     public HologramLine(Location startLocation, HologramLineType type, Object content) {
         this.startLocation = startLocation;
@@ -46,21 +47,21 @@ public class HologramLine {
     }
 
     protected void createStand() {
-        World world = ((CraftWorld)startLocation.getWorld()).getHandle();
-        this.stand = new EntityArmorStand(world, startLocation.getX(), startLocation.getY(), startLocation.getZ());
-        this.stand.j(true);
+        Level level = ((CraftWorld)startLocation.getWorld()).getHandle();
+        this.stand = new ArmorStand(level, startLocation.getX(), startLocation.getY(), startLocation.getZ());
+        this.stand.setInvisible(true);
         updateTypeAndContent();
     }
 
     private void updateTypeAndContent() {
         switch (type) {
             case TEXT:
-                this.stand.a(new ChatComponentText((String) content));
-                this.stand.n(true);
+                this.stand.setCustomName(new ChatMessageContent(content.toString()).decorated());
+                this.stand.setCustomNameVisible(true);
                 break;
             case ITEM_HEAD:
-                addEquipment(EnumItemSlot.f, (ItemStack) content);
-                this.stand.n(false);
+                addEquipment(EquipmentSlot.HEAD, (ItemStack) content);
+                this.stand.setCustomNameVisible(false);
                 break;
         }
     }
@@ -72,7 +73,7 @@ public class HologramLine {
     }
 
     public void spawn(Player player) {
-        PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity(stand);
+        ClientboundAddEntityPacket packet = new ClientboundAddEntityPacket(stand);
         sendPacket(player, packet);
 
         sendMetaData(player);
@@ -80,32 +81,34 @@ public class HologramLine {
     }
 
     public void despawn(Player player) {
-        PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(stand.getBukkitEntity().getEntityId());
+        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(stand.getBukkitEntity().getEntityId());
         sendPacket(player, packet);
     }
 
-    public void addEquipment(EnumItemSlot slot, ItemStack stack) {
+    public void addEquipment(EquipmentSlot slot, ItemStack stack) {
         this.equipment.add(new Tuple<>(slot, stack));
+        this.stand.setItemSlot(slot, CraftItemStack.asNMSCopy(stack));
     }
 
     protected void sendEquipment(Player player) {
         if(!this.equipment.isEmpty()) {
-            List<Pair<EnumItemSlot, net.minecraft.world.item.ItemStack>> pairs = new ArrayList<>();
-            for(Tuple<EnumItemSlot, ItemStack> tuple : equipment) {
-                pairs.add(new Pair<>(tuple.getFirst(), CraftItemStack.asNMSCopy(tuple.getSecond())));
+            List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> pairs = new ArrayList<>();
+            for(Tuple<EquipmentSlot, ItemStack> tuple : equipment) {
+                net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(tuple.getSecond());
+                pairs.add(new Pair<>(tuple.getFirst(), nmsItem));
             }
-            PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(stand.getBukkitEntity().getEntityId(), pairs);
+            ClientboundSetEquipmentPacket packet = new ClientboundSetEquipmentPacket(stand.getBukkitEntity().getEntityId(), pairs);
             sendPacket(player, packet);
         }
     }
 
     protected void sendMetaData(Player player) {
-        PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(stand.getBukkitEntity().getEntityId(), stand.ai(), true);
+        ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(stand.getBukkitEntity().getEntityId(), stand.getEntityData(), true);
         sendPacket(player, packet);
     }
 
     protected void sendPacket(Player player, Packet<?> packet) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
-        craftPlayer.getHandle().b.a(packet);
+        craftPlayer.getHandle().connection.send(packet);
     }
 }

@@ -29,22 +29,15 @@ public class HashiCorpVaultAdapter implements VaultProvider {
     }
 
     @Override
-    public @Nullable String getSecret(String key) {
-        Map<String, String> secrets = getStore("secrets");
+    @Nullable
+    public String getSecret(String category, String key) {
+        Map<String, String> secrets = getStore(category);
         if(secrets != null) {
             return secrets.get(key);
         }
         return null;
     }
 
-    @Override
-    public @Nullable String getConfiguration(String key) {
-        Map<String, String> secrets = getStore("configuration");
-        if(secrets != null) {
-            return secrets.get(key);
-        }
-        return null;
-    }
 
     @Nullable
     public Map<String, String> getStore(String category) {

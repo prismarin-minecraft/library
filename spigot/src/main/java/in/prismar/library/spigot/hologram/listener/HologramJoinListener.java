@@ -1,8 +1,8 @@
 package in.prismar.library.spigot.hologram.listener;
 
+import lombok.AllArgsConstructor;
 import in.prismar.library.spigot.hologram.Hologram;
 import in.prismar.library.spigot.hologram.HologramBootstrap;
-import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,10 +1,8 @@
 package in.prismar.library.spigot.hologram;
 
-import in.prismar.library.spigot.hologram.line.HologramLine;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import in.prismar.library.spigot.hologram.line.HologramLine;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
