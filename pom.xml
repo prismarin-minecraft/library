@@ -17,6 +17,7 @@
         <module>web</module>
         <module>spigot</module>
         <module>all</module>
+        <module>meta</module>
     </modules>
 
     <properties>
