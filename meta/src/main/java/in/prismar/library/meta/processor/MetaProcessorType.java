@@ -1,4 +1,4 @@
-package in.prismar.library.meta.scanner;
+package in.prismar.library.meta.processor;
 
 /**
  * Copyright (c) Maga, All Rights Reserved

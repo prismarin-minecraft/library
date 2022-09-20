@@ -3,10 +3,10 @@ package in.prismar.library.meta;
 import com.google.common.reflect.ClassPath;
 import in.prismar.library.meta.anno.Inject;
 import in.prismar.library.meta.anno.Service;
-import in.prismar.library.meta.scanner.MetaProcessor;
-import in.prismar.library.meta.scanner.MetaProcessorType;
-import in.prismar.library.meta.scanner.impl.InjectProcessor;
-import in.prismar.library.meta.scanner.impl.ServiceProcessor;
+import in.prismar.library.meta.processor.MetaProcessor;
+import in.prismar.library.meta.processor.MetaProcessorType;
+import in.prismar.library.meta.processor.impl.InjectProcessor;
+import in.prismar.library.meta.processor.impl.ServiceProcessor;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;

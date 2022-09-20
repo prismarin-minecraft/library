@@ -1,10 +1,8 @@
-package in.prismar.library.meta.scanner;
+package in.prismar.library.meta.processor;
 
 import in.prismar.library.meta.MetaRegistry;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.lang.annotation.Annotation;
 
 /**
  * Copyright (c) Maga, All Rights Reserved

@@ -1,6 +1,4 @@
-package in.prismar.library.meta.scanner;
-
-import java.lang.annotation.Annotation;
+package in.prismar.library.meta.processor;
 
 /**
  * Copyright (c) Maga, All Rights Reserved

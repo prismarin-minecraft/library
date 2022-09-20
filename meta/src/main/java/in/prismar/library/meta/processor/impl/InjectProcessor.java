@@ -1,9 +1,9 @@
-package in.prismar.library.meta.scanner.impl;
+package in.prismar.library.meta.processor.impl;
 
 import in.prismar.library.meta.MetaEntity;
 import in.prismar.library.meta.MetaRegistry;
-import in.prismar.library.meta.scanner.AbstractMetaProcessor;
-import in.prismar.library.meta.scanner.MetaProcessorType;
+import in.prismar.library.meta.processor.AbstractMetaProcessor;
+import in.prismar.library.meta.processor.MetaProcessorType;
 
 import java.lang.reflect.Field;
 
