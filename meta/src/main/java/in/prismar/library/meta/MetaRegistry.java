@@ -10,6 +10,8 @@ import in.prismar.library.meta.processor.impl.ServiceProcessor;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,8 +46,28 @@ public class MetaRegistry {
         return entities.get(type);
     }
 
-    public void registerEntity(Object instance) {
-        entities.put(instance.getClass(), new MetaEntity(instance));
+    public MetaEntity registerEntity(Object instance) {
+        MetaEntity entity = new MetaEntity(instance);
+        entities.put(instance.getClass(), entity);
+        return entity;
+    }
+
+    public MetaEntity registerEntity(Class<?> target) throws Exception {
+        Constructor<?> constructor = target.getConstructors()[0];
+        Object instance;
+        if(constructor.getParameterCount() >= 1) {
+            Object[] params = new Object[constructor.getParameterCount()];
+            for (int i = 0; i < constructor.getParameterCount(); i++) {
+                Parameter parameter = constructor.getParameters()[i];
+                if(existsEntity(parameter.getType())) {
+                    params[i] = getEntity(parameter.getType()).getInstance();
+                }
+            }
+            instance = constructor.newInstance(params);
+        } else {
+            instance = constructor.newInstance();
+        }
+        return registerEntity(instance);
     }
 
     public void registerProcessor(Class<? extends Annotation> type, MetaProcessor processor) {

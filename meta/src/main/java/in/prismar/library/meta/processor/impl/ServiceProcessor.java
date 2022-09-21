@@ -26,22 +26,10 @@ public class ServiceProcessor extends AbstractMetaProcessor {
         if(target.isAnnotationPresent(Service.class)) {
             Service service = target.getAnnotation(Service.class);
             if(service.autoRegister()) {
-                Constructor<?> constructor = target.getConstructors()[0];
-                Object instance;
-                if(constructor.getParameterCount() >= 1) {
-                    Object[] params = new Object[constructor.getParameterCount()];
-                    for (int i = 0; i < constructor.getParameterCount(); i++) {
-                        Parameter parameter = constructor.getParameters()[i];
-                        if(getRegistry().existsEntity(parameter.getType())) {
-                            params[i] = getRegistry().getEntity(parameter.getType()).getInstance();
-                        }
-                    }
-                    instance = constructor.newInstance(params);
-                } else {
-                    instance = constructor.newInstance();
-                }
-                getRegistry().registerEntity(instance);
+                getRegistry().registerEntity(target);
             }
         }
     }
+
+
 }
