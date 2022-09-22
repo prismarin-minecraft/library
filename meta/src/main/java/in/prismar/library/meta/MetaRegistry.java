@@ -77,13 +77,16 @@ public class MetaRegistry {
     public void scan(ClassLoader loader, String packageName) {
         try {
             ClassPath classPath = ClassPath.from(loader);
-            for(ClassPath.ClassInfo info : classPath.getTopLevelClasses(packageName)) {
-                Class<?> target = info.load();
-                for(Map.Entry<Class<? extends Annotation>, MetaProcessor> processor : processors.entrySet()) {
-                    if(processor.getValue().getType() == MetaProcessorType.SCAN) {
-                        processor.getValue().process(target);
+            for(ClassPath.ClassInfo info : classPath.getTopLevelClasses()) {
+                if(info.getName().startsWith(packageName.concat("."))) {
+                    Class<?> target = info.load();
+                    for(Map.Entry<Class<? extends Annotation>, MetaProcessor> processor : processors.entrySet()) {
+                        if(processor.getValue().getType() == MetaProcessorType.SCAN) {
+                            processor.getValue().process(target);
+                        }
                     }
                 }
+
             }
         }catch (Exception exception) {
             exception.printStackTrace();
