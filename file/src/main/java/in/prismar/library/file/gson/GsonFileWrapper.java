@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.*;
+import java.lang.reflect.Type;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -21,6 +22,7 @@ public class GsonFileWrapper<T> {
     @Setter
     private T entity;
     private Class<?> type;
+    private Type typeToken;
     private ExceptionMapper exceptionMapper;
 
     private Gson gson;
@@ -38,7 +40,25 @@ public class GsonFileWrapper<T> {
         this.file = file;
         this.type = type;
         this.exceptionMapper = exceptionMapper;
+        initialize();
+    }
 
+    public GsonFileWrapper(File file, Type type, ExceptionMapper exceptionMapper) {
+        this.file = file;
+        this.typeToken = type;
+        this.exceptionMapper = exceptionMapper;
+        initialize();
+    }
+
+    public GsonFileWrapper(String filePath, Type type) {
+        this(filePath, type, null);
+    }
+
+    public GsonFileWrapper(String filePath, Type type, ExceptionMapper mapper) {
+        this(new File(filePath), type, mapper);
+    }
+
+    private void initialize() {
         // Create directories
         File directory = new File(file.getParentFile().getAbsolutePath());
         directory.mkdirs();
@@ -60,7 +80,7 @@ public class GsonFileWrapper<T> {
         try {
             if(exists()) {
                 @Cleanup BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-                this.entity = (T) gson.fromJson(reader, type);
+                this.entity = (T) gson.fromJson(reader, typeToken != null ? typeToken : type);
             }
         }catch (Exception exception) {
             if(this.exceptionMapper != null) {

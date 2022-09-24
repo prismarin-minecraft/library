@@ -22,8 +22,8 @@ public final class ItemUtil {
         }
     }
 
-    public static boolean hasItemInHand(Player player, boolean left) {
-        if(left) {
+    public static boolean hasItemInHand(Player player, boolean right) {
+        if(right) {
             if(player.getInventory().getItemInMainHand() != null) {
                 if(player.getInventory().getItemInMainHand().getType() != Material.AIR) {
                     return true;
@@ -40,9 +40,9 @@ public final class ItemUtil {
         }
     }
 
-    public static boolean hasItemInHandAndHasDisplayName(Player player, boolean left) {
-        if(hasItemInHand(player, left)) {
-            if(left) {
+    public static boolean hasItemInHandAndHasDisplayName(Player player, boolean right) {
+        if(hasItemInHand(player, right)) {
+            if(right) {
                 if(player.getInventory().getItemInMainHand().hasItemMeta()) {
                     if(player.getInventory().getItemInMainHand().getItemMeta().hasDisplayName()) {
                         return true;
