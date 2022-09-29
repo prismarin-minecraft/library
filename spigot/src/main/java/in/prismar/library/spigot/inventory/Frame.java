@@ -36,11 +36,12 @@ public class Frame {
         this.eventBus = new EventBus();
     }
 
-    public Frame fillInventory(Material filling) {
-        ItemStack item = new ItemBuilder(filling).setName(" ").build();
-        for (int i = 0; i < properties.getRows() * 9; i++) {
-            addButton(i, item);
-        }
+    public Frame fill() {
+        return fill(Material.GRAY_STAINED_GLASS_PANE);
+    }
+
+    public Frame fill(Material filling) {
+        this.properties.setFilling(filling);
         return this;
     }
 
@@ -118,6 +119,13 @@ public class Frame {
 
     public Inventory build() {
         output = Bukkit.createInventory(null, properties.getRows() * 9, properties.getTitle());
+        if(properties.getFilling() != null) {
+            ItemStack filling = new ItemStack(properties.getFilling());
+            for (int i = 0; i < output.getSize(); i++) {
+                output.setItem(i, filling);
+            }
+        }
+
         buildButtons();
         return output;
     }

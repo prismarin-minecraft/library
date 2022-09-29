@@ -1,4 +1,6 @@
-package in.prismar.library.meta.processor;
+package in.prismar.library.messaging.packet;
+
+import java.io.Serializable;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -6,11 +8,5 @@ package in.prismar.library.meta.processor;
  * Proprietary and confidential
  * Written by Maga
  **/
-public interface MetaProcessor {
-
-    void process(Class<?> target) throws Exception;
-    MetaProcessorType getType();
-
-
-
+public interface Packet extends Serializable {
 }

@@ -1,6 +1,7 @@
 package in.prismar.library.spigot.inventory;
 
 import lombok.Data;
+import org.bukkit.Material;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -12,6 +13,7 @@ import lombok.Data;
 public class FrameProperties {
 
     private final String title;
+    private Material filling;
     private final int rows;
     private boolean async;
 

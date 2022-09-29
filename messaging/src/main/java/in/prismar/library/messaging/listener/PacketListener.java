@@ -1,4 +1,6 @@
-package in.prismar.library.meta.processor;
+package in.prismar.library.messaging.listener;
+
+import in.prismar.library.messaging.packet.Packet;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -6,11 +8,7 @@ package in.prismar.library.meta.processor;
  * Proprietary and confidential
  * Written by Maga
  **/
-public interface MetaProcessor {
+public interface PacketListener<T extends Packet> {
 
-    void process(Class<?> target) throws Exception;
-    MetaProcessorType getType();
-
-
-
+    void onReceive(T packet);
 }
