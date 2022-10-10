@@ -34,8 +34,8 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public <T extends Packet> void addListener(Class<T> packetClass, PacketListener<T> listener) {
-        topic.addListener(packetClass, (charSequence, packet) -> {
+    public void addListener(PacketListener<Packet> listener) {
+        topic.addListener(Packet.class, (charSequence, packet) -> {
             listener.onReceive(packet);
         });
     }

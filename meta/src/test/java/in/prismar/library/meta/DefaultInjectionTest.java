@@ -22,8 +22,7 @@ public class DefaultInjectionTest {
     @Test
     public void test() {
         registry.registerEntity(this);
-        registry.scan(DefaultInjectionTest.class.getClassLoader(), "in.prismar.library.meta");
-        registry.load();
+        registry.build(DefaultInjectionTest.class.getClassLoader(), "in.prismar.library.meta");
 
         Assertions.assertEquals("Works", instance.execute());
     }

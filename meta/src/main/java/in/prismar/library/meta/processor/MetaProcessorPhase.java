@@ -6,11 +6,11 @@ package in.prismar.library.meta.processor;
  * Proprietary and confidential
  * Written by Maga
  **/
-public interface MetaProcessor {
+public enum MetaProcessorPhase {
 
-    void process(Class<?> target) throws Exception;
-    MetaProcessorPhase getPhase();
+    DISCOVERY,
 
-
-
+    POST_DISCOVERY,
+    INJECTION,
+    POST_INJECTION;
 }

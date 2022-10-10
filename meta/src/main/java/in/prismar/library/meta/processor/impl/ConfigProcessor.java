@@ -4,7 +4,7 @@ import in.prismar.library.meta.MetaEntity;
 import in.prismar.library.meta.MetaRegistry;
 import in.prismar.library.meta.anno.Config;
 import in.prismar.library.meta.processor.AbstractMetaProcessor;
-import in.prismar.library.meta.processor.MetaProcessorType;
+import in.prismar.library.meta.processor.MetaProcessorPhase;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -20,7 +20,7 @@ public class ConfigProcessor extends AbstractMetaProcessor {
     private final ConfigProvider provider;
 
     public ConfigProcessor(MetaRegistry registry, ConfigProvider provider) {
-        super(registry, MetaProcessorType.LOAD);
+        super(registry, MetaProcessorPhase.INJECTION);
         this.provider = provider;
     }
 
@@ -31,7 +31,11 @@ public class ConfigProcessor extends AbstractMetaProcessor {
             if(field.isAnnotationPresent(Config.class)) {
                 Config anno = field.getAnnotation(Config.class);
                 Object value = provider.getConfigValue(anno.value());
-                field.set(self.getInstance(), value == null ? anno.defaultValue() : value);
+                boolean success = field.trySetAccessible();
+                if(success) {
+                    field.set(self.getInstance(), value == null ? anno.defaultValue() : value);
+                }
+
             }
         }
     }

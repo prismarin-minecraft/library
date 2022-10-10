@@ -2,16 +2,20 @@ package in.prismar.library.meta;
 
 import com.google.common.reflect.ClassPath;
 import in.prismar.library.meta.anno.Inject;
+import in.prismar.library.meta.anno.SafeInitialize;
 import in.prismar.library.meta.anno.Service;
 import in.prismar.library.meta.processor.MetaProcessor;
-import in.prismar.library.meta.processor.MetaProcessorType;
+import in.prismar.library.meta.processor.MetaProcessorPhase;
 import in.prismar.library.meta.processor.impl.InjectProcessor;
+import in.prismar.library.meta.processor.impl.SafeInitializeProcessor;
 import in.prismar.library.meta.processor.impl.ServiceProcessor;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MetaRegistry {
 
     private Map<Class<?>, MetaEntity> entities;
-    private final Map<Class<? extends Annotation>, MetaProcessor> processors;
+    private final Map<Class<? extends Annotation>, List<MetaProcessor>> processors;
 
     public MetaRegistry() {
         this.entities = new ConcurrentHashMap<>();
@@ -36,6 +40,7 @@ public class MetaRegistry {
     private void loadDefaultProcessors() {
         registerProcessor(Service.class, new ServiceProcessor(this));
         registerProcessor(Inject.class, new InjectProcessor(this));
+        registerProcessor(SafeInitialize.class, new SafeInitializeProcessor(this));
     }
 
     public boolean existsEntity(Class<?> type) {
@@ -71,39 +76,45 @@ public class MetaRegistry {
     }
 
     public void registerProcessor(Class<? extends Annotation> type, MetaProcessor processor) {
-        this.processors.put(type, processor);
+        if(!this.processors.containsKey(type)) {
+            this.processors.put(type, new ArrayList<>());
+        }
+        this.processors.get(type).add(processor);
     }
 
-    public void scan(ClassLoader loader, String packageName) {
+    public void build(ClassLoader loader, String packageName) {
         try {
             ClassPath classPath = ClassPath.from(loader);
             for(ClassPath.ClassInfo info : classPath.getTopLevelClasses()) {
                 if(info.getName().startsWith(packageName.concat("."))) {
                     Class<?> target = info.load();
-                    for(Map.Entry<Class<? extends Annotation>, MetaProcessor> processor : processors.entrySet()) {
-                        if(processor.getValue().getType() == MetaProcessorType.SCAN) {
-                            processor.getValue().process(target);
+                    for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> entry : processors.entrySet()) {
+                        for(MetaProcessor processor : entry.getValue()) {
+                            if(processor.getPhase() == MetaProcessorPhase.DISCOVERY) {
+                                processor.process(target);
+                            }
                         }
                     }
                 }
-
             }
+            runPhase(MetaProcessorPhase.POST_DISCOVERY);
+            runPhase(MetaProcessorPhase.INJECTION);
+            runPhase(MetaProcessorPhase.POST_INJECTION);
         }catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    public void load() {
-        try {
-            for(Map.Entry<Class<?>, MetaEntity> entry : entities.entrySet()) {
-                for(Map.Entry<Class<? extends Annotation>, MetaProcessor> processor : processors.entrySet()) {
-                    if(processor.getValue().getType() ==  MetaProcessorType.LOAD) {
-                        processor.getValue().process(entry.getKey());
+    private void runPhase(MetaProcessorPhase phase) throws Exception {
+        for(Map.Entry<Class<?>, MetaEntity> entry : entities.entrySet()) {
+            for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> processorEntry : processors.entrySet()) {
+                for(MetaProcessor processor : processorEntry.getValue()) {
+                    if(processor.getPhase() ==  phase) {
+                        processor.process(entry.getKey());
                     }
                 }
+
             }
-        }catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 

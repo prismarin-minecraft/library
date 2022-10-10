@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public abstract class AbstractMetaProcessor implements MetaProcessor {
 
     private final MetaRegistry registry;
-    private final MetaProcessorType type;
+    private final MetaProcessorPhase phase;
 
 
 }

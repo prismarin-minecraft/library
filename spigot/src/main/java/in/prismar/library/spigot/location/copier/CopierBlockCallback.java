@@ -1,4 +1,6 @@
-package in.prismar.library.meta.processor;
+package in.prismar.library.spigot.location.copier;
+
+import org.bukkit.block.Block;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -6,8 +8,7 @@ package in.prismar.library.meta.processor;
  * Proprietary and confidential
  * Written by Maga
  **/
-public enum MetaProcessorType {
+public interface CopierBlockCallback {
 
-    SCAN,
-    LOAD;
+    void call(Block block);
 }

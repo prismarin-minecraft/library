@@ -3,10 +3,7 @@ package in.prismar.library.meta.processor.impl;
 import in.prismar.library.meta.MetaRegistry;
 import in.prismar.library.meta.anno.Service;
 import in.prismar.library.meta.processor.AbstractMetaProcessor;
-import in.prismar.library.meta.processor.MetaProcessorType;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Parameter;
+import in.prismar.library.meta.processor.MetaProcessorPhase;
 
 
 /**
@@ -18,7 +15,7 @@ import java.lang.reflect.Parameter;
 public class ServiceProcessor extends AbstractMetaProcessor {
 
     public ServiceProcessor(MetaRegistry registry) {
-        super(registry, MetaProcessorType.SCAN);
+        super(registry, MetaProcessorPhase.DISCOVERY);
     }
 
     @Override

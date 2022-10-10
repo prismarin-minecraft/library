@@ -12,10 +12,7 @@ import java.lang.annotation.Target;
  * Written by Maga
  **/
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Config {
-
-    String value();
-    String defaultValue() default "";
+@Target(ElementType.METHOD)
+public @interface SafeInitialize {
 
 }

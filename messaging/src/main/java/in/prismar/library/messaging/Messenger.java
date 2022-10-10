@@ -15,5 +15,5 @@ public interface Messenger {
 
     <T extends Packet> void sendPacketAsync(T packet);
 
-    <T extends Packet> void addListener(Class<T> packetClass, PacketListener<T> listener);
+    void addListener(PacketListener<Packet> listener);
 }

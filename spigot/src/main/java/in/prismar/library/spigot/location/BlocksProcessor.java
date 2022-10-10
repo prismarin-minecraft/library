@@ -8,7 +8,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -55,7 +57,8 @@ public class BlocksProcessor {
         this.source = min.getWorld();
     }
 
-    public void start() {
+    public CompletableFuture<Set<Block>> start() {
+        CompletableFuture<Set<Block>> future = new CompletableFuture<>();
         this.changed.clear();
         this.x = xMin;
         new BukkitRunnable() {
@@ -63,9 +66,11 @@ public class BlocksProcessor {
             public void run() {
                 if(!work()) {
                     cancel();
+                    future.complete(changed);
                 }
             }
         }.runTaskTimer(plugin, 1, 1);
+        return future;
     }
 
     protected boolean work() {

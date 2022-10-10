@@ -3,7 +3,7 @@ package in.prismar.library.spigot.meta;
 import in.prismar.library.meta.MetaEntity;
 import in.prismar.library.meta.MetaRegistry;
 import in.prismar.library.meta.processor.AbstractMetaProcessor;
-import in.prismar.library.meta.processor.MetaProcessorType;
+import in.prismar.library.meta.processor.MetaProcessorPhase;
 import in.prismar.library.spigot.command.spigot.SpigotCommand;
 import in.prismar.library.spigot.meta.anno.AutoCommand;
 import in.prismar.library.spigot.setup.SpigotSetup;
@@ -20,7 +20,7 @@ public class SpigotCommandProcessor extends AbstractMetaProcessor {
     private final SpigotSetup setup;
 
     public SpigotCommandProcessor(SpigotSetup setup, MetaRegistry registry) {
-        super(registry, MetaProcessorType.SCAN);
+        super(registry, MetaProcessorPhase.DISCOVERY);
         this.setup = setup;
     }
 
