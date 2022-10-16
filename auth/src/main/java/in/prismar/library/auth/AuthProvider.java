@@ -1,4 +1,4 @@
-package in.prismar.library.authentication;
+package in.prismar.library.auth;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -6,9 +6,9 @@ package in.prismar.library.authentication;
  * Proprietary and confidential
  * Written by Maga
  **/
-public interface AuthenticationProvider {
+public interface AuthProvider {
 
     String generateToken(String subject, long expiration, String... roles);
 
-    AuthenticationResult authenticate(String token);
+    AuthResult auth(String token);
 }

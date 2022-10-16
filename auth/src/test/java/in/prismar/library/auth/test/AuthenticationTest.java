@@ -1,7 +1,7 @@
-package in.prismar.library.authentication.test;
+package in.prismar.library.auth.test;
 
-import in.prismar.library.authentication.AuthenticationProvider;
-import in.prismar.library.authentication.jwt.JWTAuthenticationAdapter;
+import in.prismar.library.auth.AuthProvider;
+import in.prismar.library.auth.jwt.JWTAuthAdapter;
 import io.fusionauth.jwt.JWTUtils;
 import io.fusionauth.jwt.domain.KeyPair;
 import org.junit.Before;
@@ -17,18 +17,18 @@ import org.junit.jupiter.api.Assertions;
 public class AuthenticationTest {
 
 
-    private AuthenticationProvider provider;
+    private AuthProvider provider;
 
     @Before
     public void setup() {
         KeyPair pair = JWTUtils.generate2048_RSAKeyPair();
-        provider = new JWTAuthenticationAdapter(pair.privateKey, pair.publicKey);
+        provider = new JWTAuthAdapter(pair.privateKey, pair.publicKey);
     }
 
     @Test
     public void testValidation() {
         final String token = provider.generateToken("Test", 30, "TestRole");
-        Assertions.assertEquals(true, provider.authenticate(token).isSuccess());
+        Assertions.assertEquals(true, provider.auth(token).isSuccess());
     }
 
 }

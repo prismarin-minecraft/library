@@ -1,8 +1,7 @@
-package in.prismar.library.authentication.jwt;
+package in.prismar.library.auth.jwt;
 
-import in.prismar.library.authentication.AuthenticationProvider;
-import in.prismar.library.authentication.AuthenticationResult;
-import io.fusionauth.jwt.JWTDecoder;
+import in.prismar.library.auth.AuthProvider;
+import in.prismar.library.auth.AuthResult;
 import io.fusionauth.jwt.Signer;
 import io.fusionauth.jwt.Verifier;
 import io.fusionauth.jwt.domain.JWT;
@@ -19,7 +18,7 @@ import java.util.List;
  * Proprietary and confidential
  * Written by Maga
  **/
-public class JWTAuthenticationAdapter implements AuthenticationProvider {
+public class JWTAuthAdapter implements AuthProvider {
 
     private final String privateKey;
     private final String publicKey;
@@ -27,7 +26,7 @@ public class JWTAuthenticationAdapter implements AuthenticationProvider {
     private Signer signer;
     private Verifier verifier;
 
-    public JWTAuthenticationAdapter(String privateKey, String publicKey) {
+    public JWTAuthAdapter(String privateKey, String publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
 
@@ -51,12 +50,12 @@ public class JWTAuthenticationAdapter implements AuthenticationProvider {
     }
 
     @Override
-    public AuthenticationResult authenticate(String token) {
+    public AuthResult auth(String token) {
         try {
             JWT jwt = JWT.getDecoder().decode(token, verifier);
             List<String> roles = (List<String>) jwt.getObject("roles");
-            return new AuthenticationResult(true, jwt.subject, jwt.expiration.toInstant().toEpochMilli(), roles);
+            return new AuthResult(true, jwt.subject, jwt.expiration.toInstant().toEpochMilli(), roles);
         }catch (Exception exception) {}
-        return new AuthenticationResult(false, null, -1, null);
+        return new AuthResult(false, null, -1, null);
     }
 }

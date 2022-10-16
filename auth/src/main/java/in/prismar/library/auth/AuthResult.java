@@ -1,4 +1,4 @@
-package in.prismar.library.authentication;
+package in.prismar.library.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResult {
+public class AuthResult {
 
     private boolean success;
     private String subject;
