@@ -19,6 +19,7 @@ steps:
       serverSecrets:
         from_secret: NEXUS_CREDENTIALS
   - name: test
+    pull: always
     depends_on: [nexus-authentication]
     image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
     commands:
@@ -46,6 +47,7 @@ steps:
         from_secret: NEXUS_CREDENTIALS
   - name: test & deploy
     depends_on: [nexus-authentication]
+    pull: always
     image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
     commands:
       - mvn deploy -B -s settings.xml
