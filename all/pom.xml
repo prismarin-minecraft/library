@@ -45,12 +45,6 @@
         </dependency>
         <dependency>
             <groupId>in.prismar.library</groupId>
-            <artifactId>authentication</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>in.prismar.library</groupId>
             <artifactId>meta</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
