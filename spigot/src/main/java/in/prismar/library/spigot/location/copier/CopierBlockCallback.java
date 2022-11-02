@@ -10,5 +10,5 @@ import org.bukkit.block.Block;
  **/
 public interface CopierBlockCallback {
 
-    void call(Block block);
+    boolean call(Block from, Block to);
 }

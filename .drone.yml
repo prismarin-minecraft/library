@@ -10,7 +10,7 @@ trigger:
     - pull_request
 
 steps:
-  - name: nexus authentication
+  - name: nexus-authentication
     image: md5lukas/drone-mvn-settings
     settings:
       servers:
@@ -19,7 +19,7 @@ steps:
       serverSecrets:
         from_secret: NEXUS_CREDENTIALS
   - name: test
-    image: maven:3.8.6-eclipse-temurin-17-alpine
+    image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
     commands:
       - mvn test -B -s settings.xml
 
@@ -35,7 +35,7 @@ trigger:
     - push
 
 steps:
-  - name: nexus authentication
+  - name: nexus-authentication
     image: md5lukas/drone-mvn-settings
     settings:
       servers:
@@ -44,6 +44,6 @@ steps:
       serverSecrets:
         from_secret: NEXUS_CREDENTIALS
   - name: test & deploy
-    image: maven:3.8.6-eclipse-temurin-17-alpine
+    image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
     commands:
       - mvn deploy -B -s settings.xml

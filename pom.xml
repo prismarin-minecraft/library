@@ -28,15 +28,15 @@
 
     <distributionManagement>
         <repository>
-            <id>prismarin-minecraft</id>
-            <url>https://nexus.prismar.in/repository/prismarin-minecraft/</url>
+            <id>prismarin</id>
+            <url>https://nexus.prismar.in/repository/prismarin/</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>prismarin-minecraft</id>
-            <url>https://nexus.prismar.in/repository/prismarin-minecraft/</url>
+            <id>prismarin</id>
+            <url>https://nexus.prismar.in/repository/prismarin/</url>
         </repository>
     </repositories>
 

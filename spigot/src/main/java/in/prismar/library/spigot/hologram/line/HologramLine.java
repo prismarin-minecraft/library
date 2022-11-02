@@ -66,10 +66,11 @@ public class HologramLine {
         }
     }
 
-    public void update(HologramLineType type, Object content) {
+    public void update(Player player, HologramLineType type, Object content) {
         this.type = type;
         this.content = content;
         updateTypeAndContent();
+        sendMetaData(player);
     }
 
     public void spawn(Player player) {
@@ -79,6 +80,7 @@ public class HologramLine {
         sendMetaData(player);
         sendEquipment(player);
     }
+
 
     public void despawn(Player player) {
         ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(stand.getBukkitEntity().getEntityId());
@@ -102,7 +104,7 @@ public class HologramLine {
         }
     }
 
-    protected void sendMetaData(Player player) {
+    public void sendMetaData(Player player) {
         ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(stand.getBukkitEntity().getEntityId(), stand.getEntityData(), true);
         sendPacket(player, packet);
     }

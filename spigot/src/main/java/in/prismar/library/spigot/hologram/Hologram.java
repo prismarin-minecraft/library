@@ -61,7 +61,28 @@ public class Hologram {
         for(String line : lines) {
             this.lines.add(new Tuple<>(HologramLineType.TEXT, line));
         }
+        for(HologramViewer viewer : viewers.values()) {
+            despawnLines(viewer);
+        }
         refreshViewers();
+        return this;
+    }
+
+    public Hologram updateLine(int index, Object value) {
+        Tuple<HologramLineType, Object> line = this.lines.get(index);
+        line.setSecond(value);
+        for(HologramViewer viewer : viewers.values()) {
+            if(viewer.isSpawned()) {
+                try {
+                    HologramLine current = viewer.getLines().get(index);
+                    current.update(viewer.getPlayer(), line.getFirst(), value);
+                }catch (Exception exception) {
+
+                }
+
+            }
+
+        }
         return this;
     }
 

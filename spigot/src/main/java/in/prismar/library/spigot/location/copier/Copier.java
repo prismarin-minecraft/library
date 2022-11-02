@@ -45,6 +45,7 @@ public class Copier {
 
     private long maxWorkerTime;
 
+    @Setter
     private CopierBlockCallback callback;
 
 
@@ -135,6 +136,13 @@ public class Copier {
                     pasteLocation.setWorld(location.getWorld());
 
                     Block to = pasteLocation.getBlock();
+
+                    if(callback != null) {
+                        if(callback.call(from, to)) {
+                            continue;
+                        }
+                    }
+
                     to.setType(from.getType(), false);
                     to.setBlockData(from.getBlockData(), false);
 
@@ -149,11 +157,13 @@ public class Copier {
                         toSign.update(true);
                     }
 
+
                 }
             }
         }
         return new CopierResult(true);
     }
+
 
     public ExecutorService getThreadPool() {
         if(threadPool == null) {
