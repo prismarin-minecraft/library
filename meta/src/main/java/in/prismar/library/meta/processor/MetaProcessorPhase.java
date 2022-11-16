@@ -12,6 +12,4 @@ public enum MetaProcessorPhase {
     POST_DISCOVERY,
     INJECTION,
     POST_INJECTION,
-
-    RESCAN;
 }

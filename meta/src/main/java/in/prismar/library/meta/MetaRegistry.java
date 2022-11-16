@@ -76,11 +76,11 @@ public class MetaRegistry {
         return registerEntity(instance);
     }
 
-    public void registerProcessor(Class<? extends Annotation> type, MetaProcessor processor) {
+    public void registerProcessor(Class<? extends Annotation> type, MetaProcessor... processors) {
         if(!this.processors.containsKey(type)) {
             this.processors.put(type, new ArrayList<>());
         }
-        this.processors.get(type).add(processor);
+        this.processors.get(type).addAll(Arrays.asList(processors));
     }
 
     public void build(ClassLoader loader, String packageName) {
@@ -90,13 +90,7 @@ public class MetaRegistry {
                 if(info.getName().startsWith(packageName.concat("."))) {
                     Class<?> target = info.load();
                     scanned.add(target);
-                    for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> entry : processors.entrySet()) {
-                        for(MetaProcessor processor : entry.getValue()) {
-                            if(processor.getPhase() == MetaProcessorPhase.DISCOVERY) {
-                                processor.process(target);
-                            }
-                        }
-                    }
+                    run(MetaProcessorPhase.DISCOVERY, target);
                 }
             }
             runPhase(MetaProcessorPhase.POST_DISCOVERY);
@@ -107,31 +101,18 @@ public class MetaRegistry {
         }
     }
 
-    public void rescan() {
-        try {
-            for(Class<?> target : scanned) {
-                for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> entry : processors.entrySet()) {
-                    for(MetaProcessor processor : entry.getValue()) {
-                        if(processor.getPhase() == MetaProcessorPhase.RESCAN) {
-                            processor.process(target);
-                        }
-                    }
-                }
-            }
-        }catch (Exception exception) {
-            exception.printStackTrace();
+    private void runPhase(MetaProcessorPhase phase) throws Exception {
+        for(Map.Entry<Class<?>, MetaEntity> entry : entities.entrySet()) {
+            run(phase, entry.getKey());
         }
     }
 
-    private void runPhase(MetaProcessorPhase phase) throws Exception {
-        for(Map.Entry<Class<?>, MetaEntity> entry : entities.entrySet()) {
-            for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> processorEntry : processors.entrySet()) {
-                for(MetaProcessor processor : processorEntry.getValue()) {
-                    if(processor.getPhase() ==  phase) {
-                        processor.process(entry.getKey());
-                    }
+    private void run(MetaProcessorPhase phase, Class<?> target) throws Exception{
+        for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> processorEntry : processors.entrySet()) {
+            for(MetaProcessor processor : processorEntry.getValue()) {
+                if(processor.getPhase() ==  phase) {
+                    processor.process(target);
                 }
-
             }
         }
     }
