@@ -9,8 +9,9 @@ package in.prismar.library.meta.processor;
 public enum MetaProcessorPhase {
 
     DISCOVERY,
-
     POST_DISCOVERY,
     INJECTION,
-    POST_INJECTION;
+    POST_INJECTION,
+
+    RESCAN;
 }

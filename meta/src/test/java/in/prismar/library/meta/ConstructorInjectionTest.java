@@ -24,7 +24,6 @@ public class ConstructorInjectionTest {
     public void test() {
         registry.registerEntity(this);
         registry.build(ConstructorInjectionTest.class.getClassLoader(), "in.prismar.library.meta");
-
         Assertions.assertEquals("Works", instance.execute());
     }
 

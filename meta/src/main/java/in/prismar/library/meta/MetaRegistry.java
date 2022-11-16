@@ -14,9 +14,7 @@ import lombok.Getter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,9 +29,12 @@ public class MetaRegistry {
     private Map<Class<?>, MetaEntity> entities;
     private final Map<Class<? extends Annotation>, List<MetaProcessor>> processors;
 
+    private Set<Class<?>> scanned;
+
     public MetaRegistry() {
         this.entities = new ConcurrentHashMap<>();
         this.processors = new ConcurrentHashMap<>();
+        this.scanned = new HashSet<>();
         loadDefaultProcessors();
     }
 
@@ -88,6 +89,7 @@ public class MetaRegistry {
             for(ClassPath.ClassInfo info : classPath.getTopLevelClasses()) {
                 if(info.getName().startsWith(packageName.concat("."))) {
                     Class<?> target = info.load();
+                    scanned.add(target);
                     for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> entry : processors.entrySet()) {
                         for(MetaProcessor processor : entry.getValue()) {
                             if(processor.getPhase() == MetaProcessorPhase.DISCOVERY) {
@@ -100,6 +102,22 @@ public class MetaRegistry {
             runPhase(MetaProcessorPhase.POST_DISCOVERY);
             runPhase(MetaProcessorPhase.INJECTION);
             runPhase(MetaProcessorPhase.POST_INJECTION);
+        }catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void rescan() {
+        try {
+            for(Class<?> target : scanned) {
+                for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> entry : processors.entrySet()) {
+                    for(MetaProcessor processor : entry.getValue()) {
+                        if(processor.getPhase() == MetaProcessorPhase.RESCAN) {
+                            processor.process(target);
+                        }
+                    }
+                }
+            }
         }catch (Exception exception) {
             exception.printStackTrace();
         }
