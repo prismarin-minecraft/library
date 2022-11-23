@@ -2,6 +2,7 @@ package in.prismar.library.spigot.inventory.button;
 
 import in.prismar.library.spigot.inventory.button.event.FrameButtonEvent;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
 
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 public class FrameButton {
 
+    @Setter
     private ItemStack item;
     private FrameButtonEvent[] events;
     private boolean cancelClick = true;

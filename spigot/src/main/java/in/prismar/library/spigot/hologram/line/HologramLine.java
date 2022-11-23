@@ -36,19 +36,23 @@ public class HologramLine {
     private final Location startLocation;
     private HologramLineType type;
     private Object content;
+
+    private boolean small;
     private final List<Tuple<EquipmentSlot, ItemStack>> equipment;
 
-    public HologramLine(Location startLocation, HologramLineType type, Object content) {
+    public HologramLine(Location startLocation, HologramLineType type, Object content, boolean small) {
         this.startLocation = startLocation;
         this.equipment = new ArrayList<>();
         this.type = type;
         this.content = content;
+        this.small = small;
         createStand();
     }
 
     protected void createStand() {
         Level level = ((CraftWorld)startLocation.getWorld()).getHandle();
         this.stand = new ArmorStand(level, startLocation.getX(), startLocation.getY(), startLocation.getZ());
+        this.stand.setSmall(small);
         this.stand.setInvisible(true);
         updateTypeAndContent();
     }

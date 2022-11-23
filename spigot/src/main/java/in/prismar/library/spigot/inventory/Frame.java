@@ -58,6 +58,17 @@ public class Frame {
         return addButton(slot, new FrameButton(stack).addEvents(events));
     }
 
+    public Frame updateButton(int slot, ItemStack stack) {
+        if(buttons.containsKey(slot)) {
+            FrameButton button = buttons.get(slot);
+            button.setItem(stack);
+            if(getOutput() != null) {
+                getOutput().setItem(slot, stack);
+            }
+        }
+        return this;
+    }
+
     protected Frame clearButtons(int... slots) {
         for(int slot : slots) {
             this.buttons.remove(slot);

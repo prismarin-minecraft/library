@@ -3,6 +3,7 @@ package in.prismar.library.spigot.hologram;
 import lombok.Getter;
 import in.prismar.library.spigot.hologram.listener.HologramJoinListener;
 import in.prismar.library.spigot.hologram.listener.HologramQuitListener;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -17,6 +18,7 @@ import java.util.List;
  * Written by Maga
  **/
 @Getter
+@Setter
 public class HologramBootstrap implements Runnable{
 
     @Getter

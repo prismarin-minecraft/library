@@ -26,7 +26,7 @@ public class Hologram {
     private Location location;
     private List<HologramPlaceholder> placeholders;
     private Map<UUID, HologramViewer> viewers;
-    private List<Tuple<HologramLineType, Object>> lines;
+    private List<HologramLineEntry> lines;
 
     @Setter
     private boolean global;
@@ -42,24 +42,29 @@ public class Hologram {
     public Hologram(Location location, String... lines) {
         this(location);
         for(String line : lines) {
-            this.lines.add(new Tuple<>(HologramLineType.TEXT, line));
+            this.lines.add(new HologramLineEntry(HologramLineType.TEXT, line, false));
         }
     }
 
     public Hologram insertLine(int index, HologramLineType type, Object content) {
-        this.lines.set(index, new Tuple<>(type, content));
+        this.lines.set(index, new HologramLineEntry(type, content, false));
         return this;
     }
 
     public Hologram addLine(HologramLineType type, Object content) {
-        this.lines.add(new Tuple<>(type, content));
+        this.lines.add(new HologramLineEntry(type, content, false));
+        return this;
+    }
+
+    public Hologram addLine(HologramLineType type, Object content, boolean small) {
+        this.lines.add(new HologramLineEntry(type, content, small));
         return this;
     }
 
     public Hologram updateLines(String... lines) {
         this.lines.clear();
         for(String line : lines) {
-            this.lines.add(new Tuple<>(HologramLineType.TEXT, line));
+            this.lines.add(new HologramLineEntry(HologramLineType.TEXT, line, false));
         }
         for(HologramViewer viewer : viewers.values()) {
             despawnLines(viewer);
@@ -69,13 +74,13 @@ public class Hologram {
     }
 
     public Hologram updateLine(int index, Object value) {
-        Tuple<HologramLineType, Object> line = this.lines.get(index);
-        line.setSecond(value);
+        HologramLineEntry line = this.lines.get(index);
+        line.setContent(value);
         for(HologramViewer viewer : viewers.values()) {
             if(viewer.isSpawned()) {
                 try {
                     HologramLine current = viewer.getLines().get(index);
-                    current.update(viewer.getPlayer(), line.getFirst(), value);
+                    current.update(viewer.getPlayer(), line.getType(), value);
                 }catch (Exception exception) {
 
                 }
@@ -170,18 +175,18 @@ public class Hologram {
         }
         Location location = this.location.clone();
 
-        for(Tuple<HologramLineType, Object> line : lines) {
-            Object value = line.getSecond();
-            if(line.getFirst() == HologramLineType.TEXT) {
+        for(HologramLineEntry line : lines) {
+            Object value = line.getContent();
+            if(line.getType() == HologramLineType.TEXT) {
                 for(HologramPlaceholder placeholder : this.placeholders) {
                     value = value.toString().replace(placeholder.getKey(), placeholder.getReplacer().value(viewer.getPlayer()));
                 }
             }
-            HologramLine holoLine = new HologramLine(location, line.getFirst(), value);
+            HologramLine holoLine = new HologramLine(location, line.getType(), value, line.isSmall());
             holoLine.spawn(viewer.getPlayer());
             viewer.getLines().add(holoLine);
             double space = 0;
-            switch (line.getFirst()) {
+            switch (line.getType()) {
                 case ITEM_HEAD:
                     space = HologramBootstrap.getInstance().getSpaceBetweenLineHeads();
                     break;
