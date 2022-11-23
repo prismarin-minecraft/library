@@ -113,7 +113,10 @@ public class Frame {
     }
 
     public Frame openInventory(Player player, Sound sound, float volume) {
-        if(sound != null && isBuild()) {
+        if(isBuild()) {
+            if(sound != null) {
+                player.playSound(player.getLocation(), sound, volume, 1);
+            }
             player.openInventory(output);
             FrameBootstrap.getInstance().getFrames().put(player.getUniqueId(), this);
         }
