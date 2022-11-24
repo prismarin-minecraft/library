@@ -41,7 +41,7 @@ public class Frame {
     }
 
     public Frame fill(Material filling) {
-        this.properties.setFilling(filling);
+        this.properties.setFilling(new ItemBuilder(filling).setName("§c ").build());
         return this;
     }
 
@@ -69,7 +69,7 @@ public class Frame {
         return this;
     }
 
-    protected Frame clearButtons(int... slots) {
+    public Frame clearButtons(int... slots) {
         for(int slot : slots) {
             this.buttons.remove(slot);
             if(isBuild()) {
@@ -134,7 +134,7 @@ public class Frame {
     public Inventory build() {
         output = Bukkit.createInventory(null, properties.getRows() * 9, properties.getTitle());
         if(properties.getFilling() != null) {
-            ItemStack filling = new ItemStack(properties.getFilling());
+            ItemStack filling = properties.getFilling();
             for (int i = 0; i < output.getSize(); i++) {
                 output.setItem(i, filling);
             }

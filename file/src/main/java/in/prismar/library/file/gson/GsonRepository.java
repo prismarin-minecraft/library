@@ -45,7 +45,10 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
         if(folder.exists()) {
             for(File file : folder.listFiles()) {
                 if(file.getName().endsWith(".json")) {
-                    createWrapper(file.getName().replace(".json", ""));
+                    GsonFileWrapper<E> wrapper = createWrapper(file.getName().replace(".json", ""));
+                    wrapper.load();
+                    internalWrapperCache.put(wrapper.getEntity().getId(), wrapper);
+                    cache.put(wrapper.getEntity().getId(), wrapper.getEntity());
                 }
             }
         }
@@ -132,6 +135,8 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
         GsonFileWrapper<E> wrapper = createWrapper(id);
         if(wrapper.exists()) {
             wrapper.getFile().delete();
+            cache.remove(id);
+            internalWrapperCache.remove(id);
             return wrapper.getEntity();
         }
         return null;
