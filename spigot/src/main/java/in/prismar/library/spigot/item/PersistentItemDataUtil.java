@@ -20,6 +20,29 @@ public final class PersistentItemDataUtil {
 
     private static final Map<String, NamespacedKey> CACHED_KEYS = new HashMap<>();
 
+    public static void setString(Plugin plugin, ItemStack stack, String key, String value) {
+        ItemMeta meta = stack.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(!CACHED_KEYS.containsKey(key)) {
+            CACHED_KEYS.put(key, new NamespacedKey(plugin, key));
+        }
+        container.set(CACHED_KEYS.get(key), PersistentDataType.STRING, value);
+        stack.setItemMeta(meta);
+    }
+
+    public static String getString(Plugin plugin, ItemStack stack, String key) {
+        ItemMeta meta = stack.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(!CACHED_KEYS.containsKey(key)) {
+            CACHED_KEYS.put(key, new NamespacedKey(plugin, key));
+        }
+        NamespacedKey namespacedKey = CACHED_KEYS.get(key);
+        if(container.has(namespacedKey, PersistentDataType.STRING)) {
+            return container.get(namespacedKey, PersistentDataType.STRING);
+        }
+        return "";
+    }
+
     public static void setInteger(Plugin plugin, ItemStack stack, String key, int value) {
         ItemMeta meta = stack.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();

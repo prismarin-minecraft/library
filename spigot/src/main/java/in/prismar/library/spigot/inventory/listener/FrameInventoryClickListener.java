@@ -5,6 +5,7 @@ import in.prismar.library.spigot.inventory.FrameBootstrap;
 import in.prismar.library.spigot.inventory.button.FrameButton;
 import in.prismar.library.spigot.inventory.button.event.ClickFrameButtonEvent;
 import in.prismar.library.spigot.inventory.button.event.FrameButtonEvent;
+import in.prismar.library.spigot.inventory.event.FrameClickEvent;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -25,7 +26,7 @@ public class FrameInventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if(event.getClickedInventory() != null && event.getCurrentItem() != null) {
+        if(event.getCurrentItem() != null) {
             if(event.getWhoClicked() instanceof Player player) {
                 if (bootstrap.getFrames().containsKey(player.getUniqueId())) {
                     Frame frame = bootstrap.getFrames().get(player.getUniqueId());
@@ -36,6 +37,7 @@ public class FrameInventoryClickListener implements Listener {
                             return;
                         }
                     }
+                    frame.getEventBus().publish(new FrameClickEvent(frame, player, event));
 
                     if(frame.getButtons().containsKey(event.getRawSlot())) {
                         FrameButton button = frame.getButtons().get(event.getRawSlot());
