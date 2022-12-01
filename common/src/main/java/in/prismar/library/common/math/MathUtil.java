@@ -232,6 +232,16 @@ public class MathUtil {
 		value |= value >> 16;
 		return value + 1;
 	}
+
+	public static int[] generateArray(int from, int to) {
+		int[] array = new int[(to - from) + 1];
+		int index = 0;
+		for (int i = from; i <= to; i++) {
+			array[index] = i;
+			index++;
+		}
+		return array;
+	}
 	
 	static public boolean isPowerOfTwo(int value) {
 		return value != 0 && (value & value - 1) == 0;
