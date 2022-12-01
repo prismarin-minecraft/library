@@ -18,6 +18,8 @@ public class FrameProperties {
     private final int rows;
     private boolean async;
 
+    private boolean allowClick;
+
     public FrameProperties(String title, int rows) {
         this.title = title;
         this.rows = rows;

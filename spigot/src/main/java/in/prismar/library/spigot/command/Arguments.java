@@ -2,6 +2,7 @@ package in.prismar.library.spigot.command;
 
 import in.prismar.library.common.EnumUtil;
 import in.prismar.library.spigot.command.exception.CommandException;
+import in.prismar.library.spigot.command.exception.impl.WrongBooleanTypeException;
 import in.prismar.library.spigot.command.exception.impl.WrongEnumTypeException;
 import in.prismar.library.spigot.command.exception.impl.WrongNumberFormatException;
 import in.prismar.library.spigot.text.TextUtil;
@@ -32,6 +33,14 @@ public class Arguments {
             throw new WrongEnumTypeException(types);
         }
         return typeOptional.get();
+    }
+
+    public boolean getBoolean(int index) throws CommandException {
+        final String input = args[index].toLowerCase();
+        if(input.equals("true") || input.equals("false")) {
+            return Boolean.valueOf(input);
+        }
+        throw new WrongBooleanTypeException(input);
     }
 
     public int getInteger(int index) throws CommandException {

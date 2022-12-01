@@ -37,6 +37,11 @@ public class FrameInventoryClickListener implements Listener {
                             return;
                         }
                     }
+                    if(!frame.getProperties().isAllowClick()) {
+                        event.setCancelled(true);
+                        event.setResult(Event.Result.DENY);
+                    }
+
                     frame.getEventBus().publish(new FrameClickEvent(frame, player, event));
 
                     if(frame.getButtons().containsKey(event.getRawSlot())) {
