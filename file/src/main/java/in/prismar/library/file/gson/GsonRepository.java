@@ -47,8 +47,8 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
                 if(file.getName().endsWith(".json")) {
                     GsonFileWrapper<E> wrapper = createWrapper(file.getName().replace(".json", ""));
                     wrapper.load();
-                    internalWrapperCache.put(wrapper.getEntity().getId(), wrapper);
-                    cache.put(wrapper.getEntity().getId(), wrapper.getEntity());
+                    internalWrapperCache.put(wrap(wrapper.getEntity().getId()), wrapper);
+                    cache.put(wrap(wrapper.getEntity().getId()), wrapper.getEntity());
                 }
             }
         }
@@ -67,11 +67,11 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
     }
 
     public GsonFileWrapper<E> createWrapper(String id) {
-        if(this.internalWrapperCache.containsKey(id)) {
-            return this.internalWrapperCache.get(id);
+        if(this.internalWrapperCache.containsKey(wrap(id))) {
+            return this.internalWrapperCache.get(wrap(id));
         }
         GsonFileWrapper<E> wrapper = createWrapper(new File(directory + id + ".json"));
-        this.internalWrapperCache.put(id, wrapper);
+        this.internalWrapperCache.put(wrap(id), wrapper);
         return wrapper;
     }
 
@@ -83,8 +83,8 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
 
     @Override
     public E findById(String id) {
-        if(this.cache.containsKey(id)) {
-            return this.cache.get(id);
+        if(this.cache.containsKey(wrap(id))) {
+            return this.cache.get(wrap(id));
         }
         GsonFileWrapper<E> wrapper = createWrapper(id);
         return wrapper.getEntity();
@@ -92,8 +92,8 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
 
     @Override
     public Optional<E> findByIdOptional(String id) {
-        if(this.cache.containsKey(id)) {
-            return Optional.of(this.cache.get(id));
+        if(this.cache.containsKey(wrap(id))) {
+            return Optional.of(this.cache.get(wrap(id)));
         }
         GsonFileWrapper<E> wrapper = createWrapper(id);
         if(wrapper.exists() && wrapper.getEntity() != null) {
@@ -109,7 +109,7 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
 
     @Override
     public boolean existsById(String id) {
-        if(this.cache.containsKey(id)) {
+        if(this.cache.containsKey(wrap(id))) {
             return true;
         }
         GsonFileWrapper<E> wrapper = createWrapper(id);
@@ -121,7 +121,7 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
         GsonFileWrapper<E> wrapper = createWrapper(entity.getId());
         wrapper.setEntity(entity);
         wrapper.save();
-        this.cache.put(entity.getId(), entity);
+        this.cache.put(wrap(entity.getId()), entity);
         return entity;
     }
 
@@ -135,10 +135,14 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
         GsonFileWrapper<E> wrapper = createWrapper(id);
         if(wrapper.exists()) {
             wrapper.getFile().delete();
-            cache.remove(id);
-            internalWrapperCache.remove(id);
+            cache.remove(wrap(id));
+            internalWrapperCache.remove(wrap(id));
             return wrapper.getEntity();
         }
         return null;
+    }
+
+    public String wrap(String id) {
+        return id.toLowerCase();
     }
 }
