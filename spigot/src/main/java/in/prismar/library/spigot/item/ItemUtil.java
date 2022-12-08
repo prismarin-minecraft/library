@@ -12,6 +12,23 @@ import org.bukkit.inventory.ItemStack;
  **/
 public final class ItemUtil {
 
+    public static ItemStack takeItemFromHand(Player player, boolean right) {
+        ItemStack stack = right ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+        if(stack != null) {
+            if(stack.getAmount() <= 1) {
+                if(right) {
+                    player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                } else {
+                    player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+                }
+            } else {
+                stack.setAmount(stack.getAmount() - 1);
+            }
+        }
+        player.updateInventory();
+        return stack;
+    }
+
     public static boolean giveItem(Player player, ItemStack stack) {
         if(player.getInventory().firstEmpty() == -1) {
             player.getWorld().dropItem(player.getLocation(), stack);
