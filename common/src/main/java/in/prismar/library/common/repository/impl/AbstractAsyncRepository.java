@@ -56,8 +56,8 @@ public abstract class AbstractAsyncRepository<ID, E> implements Repository<ID, E
     }
 
     @Override
-    public CompletableFuture<E> saveAsync(E entity, boolean queue) {
-        if(!queue) {
+    public CompletableFuture<E> saveAsync(E entity, boolean delayed) {
+        if(!delayed) {
             return CompletableFuture.supplyAsync(() -> save(entity), executor.getThreadPool());
         }
         CompletableFuture<E> future = new CompletableFuture<>();

@@ -41,6 +41,11 @@ public class DistributorWorker<T extends DistributionTask> implements Runnable {
                     distributor.removeTask(this, entry.getKey());
                 }
             }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
