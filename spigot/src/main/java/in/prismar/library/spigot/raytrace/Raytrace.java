@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -73,6 +74,7 @@ public class Raytrace {
                 hits.add(hit);
             }
         }
+        hits.sort(Comparator.comparingDouble(o -> o.getPoint().distanceSquared(origin)));
         result.setHits(hits);
         return result;
     }
