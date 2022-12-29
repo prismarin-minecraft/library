@@ -2,9 +2,10 @@ package in.prismar.library.common;
 
 import in.prismar.library.common.registry.LocalMapRegistry;
 import in.prismar.library.common.registry.MapRegistry;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -14,10 +15,11 @@ import org.junit.jupiter.api.BeforeEach;
  **/
 public class RegistryTest {
 
-    MapRegistry<Integer, String> registry = new LocalMapRegistry<>(false, false);
 
     @Test
-    public void testAll() {
+    public void testMapRegistry() {
+        MapRegistry<Integer, String> registry = new LocalMapRegistry<>(false, false);
+
         registry.register(1, "Test");
         Assertions.assertEquals(1, registry.getAll().size());
 
@@ -27,6 +29,8 @@ public class RegistryTest {
         registry.unregister(1);
         Assertions.assertEquals(0 , registry.getAll().size());
     }
+
+
 
 
 
