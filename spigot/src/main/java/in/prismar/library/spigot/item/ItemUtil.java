@@ -1,8 +1,16 @@
 package in.prismar.library.spigot.item;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -11,6 +19,18 @@ import org.bukkit.inventory.ItemStack;
  * Written by Maga
  **/
 public final class ItemUtil {
+
+    public static void sendFakeEquipment(Player player, EquipmentSlot slot, ItemStack stack) {
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        ClientboundSetEquipmentPacket packet = new ClientboundSetEquipmentPacket(craftPlayer.getEntityId(), List
+                .of(new Pair<>(slot, CraftItemStack.asNMSCopy(stack))));
+        sendPacket(player, packet);
+    }
+
+    private static void sendPacket(Player player, Packet<?> packet) {
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        craftPlayer.getHandle().connection.send(packet);
+    }
 
     public static ItemStack takeItemFromHand(Player player, boolean right) {
         ItemStack stack = right ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
