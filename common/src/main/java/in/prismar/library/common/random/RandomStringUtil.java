@@ -1,4 +1,4 @@
-package in.prismar.library.common.text;
+package in.prismar.library.common.random;
 
 import in.prismar.library.common.math.MathUtil;
 
