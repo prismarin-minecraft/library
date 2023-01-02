@@ -22,6 +22,8 @@ public class ItemBuilder {
     private String name;
     private List<String> lore;
 
+    private int customModelData;
+
     private Map<Enchantment, Integer> enchantments;
 
     private ItemFlag[] flags;
@@ -45,6 +47,9 @@ public class ItemBuilder {
             }
             if (!meta.getItemFlags().isEmpty()) {
                 this.flags = meta.getItemFlags().toArray(new ItemFlag[0]);
+            }
+            if(meta.getCustomModelData() > 0) {
+                this.customModelData = meta.getCustomModelData();
             }
         }
     }
@@ -112,6 +117,9 @@ public class ItemBuilder {
         }
         if (flags != null) {
             meta.addItemFlags(flags);
+        }
+        if(customModelData > 0) {
+            meta.setCustomModelData(customModelData);
         }
         stack.setItemMeta(meta);
         return stack;
