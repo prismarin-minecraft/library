@@ -54,6 +54,7 @@ public class ItemBuilder {
         }
     }
 
+
     public ItemBuilder glow() {
         addEnchantment(Enchantment.ARROW_DAMAGE, 1);
         return allFlags();
@@ -67,6 +68,11 @@ public class ItemBuilder {
 
     public ItemBuilder addFlags(ItemFlag... flags) {
         this.flags = flags;
+        return this;
+    }
+
+    public ItemBuilder setCustomModelData(int data) {
+        this.customModelData = data;
         return this;
     }
 
