@@ -48,9 +48,12 @@ public class ItemBuilder {
             if (!meta.getItemFlags().isEmpty()) {
                 this.flags = meta.getItemFlags().toArray(new ItemFlag[0]);
             }
-            if(meta.getCustomModelData() > 0) {
-                this.customModelData = meta.getCustomModelData();
+            if(meta.hasCustomModelData()) {
+                if(meta.getCustomModelData() > 0) {
+                    this.customModelData = meta.getCustomModelData();
+                }
             }
+
         }
     }
 
