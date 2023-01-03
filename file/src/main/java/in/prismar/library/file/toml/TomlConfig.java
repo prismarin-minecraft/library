@@ -51,6 +51,7 @@ public class TomlConfig<T> {
     public void load() {
         if(this.file.exists()) {
             this.config = this.parser.parse(file, (path, configFormat) -> false);
+
             this.entity = type.getConstructor().newInstance();
             converter.toObject(config, entity);
         } else {
