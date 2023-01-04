@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import in.prismar.library.common.repository.entity.RepositoryEntity;
 import in.prismar.library.common.repository.impl.AbstractAsyncRepository;
+import lombok.Getter;
 import okhttp3.*;
 
 import java.util.Arrays;
@@ -21,9 +22,9 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
 
     private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
 
-    private final String url;
-    private final String token;
-    private final Class<? extends E> entityClass;
+    protected final String url;
+    protected final String token;
+    protected final Class<? extends E> entityClass;
     protected OkHttpClient client;
     protected Gson gson;
 
