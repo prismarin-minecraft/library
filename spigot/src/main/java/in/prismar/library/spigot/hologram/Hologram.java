@@ -140,6 +140,12 @@ public class Hologram {
 
     public void updateViewer(HologramViewer viewer) {
         Player player = viewer.getPlayer();
+        if(location == null) {
+            return;
+        }
+        if(location.getWorld() == null) {
+            return;
+        }
         if(location.getWorld().equals(player.getWorld())) {
             if(location.distanceSquared(player.getLocation()) <= HologramBootstrap.getInstance().getMinSpawnDistance()) {
                 if(!viewer.isSpawned()) {
