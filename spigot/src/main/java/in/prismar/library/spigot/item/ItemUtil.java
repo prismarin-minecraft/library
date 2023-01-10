@@ -20,10 +20,10 @@ import java.util.List;
  **/
 public final class ItemUtil {
 
-    public static void sendFakeEquipment(Player player, EquipmentSlot slot, ItemStack stack) {
+    public static void sendFakeMainHeadEquipment(Player player, ItemStack stack) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         ClientboundSetEquipmentPacket packet = new ClientboundSetEquipmentPacket(craftPlayer.getEntityId(), List
-                .of(new Pair<>(slot, CraftItemStack.asNMSCopy(stack))));
+                .of(new Pair<>(EquipmentSlot.MAINHAND, CraftItemStack.asNMSCopy(stack))));
         sendPacket(player, packet);
     }
 
