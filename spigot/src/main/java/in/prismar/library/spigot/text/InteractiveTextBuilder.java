@@ -47,6 +47,14 @@ public class InteractiveTextBuilder {
         return addText(new InteractiveText(text).click(click).hover(hover));
     }
 
+    public InteractiveTextBuilder addUrlText(String text, String url) {
+        return addText(new InteractiveText(text).url(url));
+    }
+
+    public InteractiveTextBuilder addUrlText(String text, String url, String hover) {
+        return addText(new InteractiveText(text).url(url).hover(hover));
+    }
+
     public TextComponent build() {
         TextComponent main = new TextComponent();
         for(InteractiveText text : texts) {
@@ -64,11 +72,18 @@ public class InteractiveTextBuilder {
     public class InteractiveText {
 
         private final String text;
+
+        private String urlText;
         private String clickText;
         private String hoverText;
 
         public InteractiveText(String text) {
             this.text = text;
+        }
+
+        public InteractiveText url(String url) {
+            this.urlText = url;
+            return this;
         }
 
         public InteractiveText click(String text) {
@@ -83,6 +98,9 @@ public class InteractiveTextBuilder {
 
         public TextComponent toComponent() {
             TextComponent component = new TextComponent(text);
+            if(urlText != null) {
+                component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, urlText));
+            }
             if(clickText != null) {
                 component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, clickText));
             }
