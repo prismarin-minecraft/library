@@ -28,13 +28,11 @@ public class DelayedOperationWorker<T extends DelayedOperation> extends Thread {
     @Override
     public void run() {
         while (running.get()) {
-            if(!pool.getQueue().isEmpty()) {
-                try {
-                    T operation = pool.getQueue().take();
-                    pool.executeTask(operation.getTask());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                T operation = pool.getQueue().take();
+                pool.executeTask(operation.getTask());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
