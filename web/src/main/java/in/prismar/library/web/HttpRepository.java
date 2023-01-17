@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import in.prismar.library.common.repository.entity.RepositoryEntity;
 import in.prismar.library.common.repository.impl.AbstractAsyncRepository;
-import lombok.Getter;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,7 +48,7 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
                 .header("Authorization", token)
                 .put(body)
                 .build();
-        try (Response response = client.newCall(request).execute()) {
+        try (okhttp3.Response response = client.newCall(request).execute()) {
             return entity;
         } catch (Exception e) {
             e.printStackTrace();
