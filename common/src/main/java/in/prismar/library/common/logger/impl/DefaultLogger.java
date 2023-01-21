@@ -22,6 +22,9 @@ public class DefaultLogger extends AbstractLogger {
     @Setter
     private SimpleDateFormat timeFormat;
 
+    @Setter
+    private boolean print = true;
+
 
     public DefaultLogger(String name, boolean includeTimestamp) {
         super(name);
@@ -33,7 +36,9 @@ public class DefaultLogger extends AbstractLogger {
     public LogRecord log(LogLevel level, String message, Object... data) {
         LogRecord record = record(level, message, data);
         final String fullMessage = "["+level.name()+"] ["+timeFormat.format(record.getTimestamp())+"] " + record.getMessage();
-        System.out.println(fullMessage);
+        if(print) {
+            System.out.println(fullMessage);
+        }
         return record;
     }
 
