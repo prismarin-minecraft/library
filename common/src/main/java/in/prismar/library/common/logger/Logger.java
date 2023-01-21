@@ -1,5 +1,7 @@
 package in.prismar.library.common.logger;
 
+import in.prismar.library.common.event.EventBus;
+
 /**
  * Copyright (c) Maga, All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -14,5 +16,7 @@ public interface Logger {
     LogRecord error(String message, Throwable throwable, Object... format);
 
     String getName();
+
+    EventBus getEventBus();
 
 }

@@ -3,6 +3,7 @@ package in.prismar.library.common.logger.impl;
 import in.prismar.library.common.logger.AbstractLogger;
 import in.prismar.library.common.logger.LogLevel;
 import in.prismar.library.common.logger.LogRecord;
+import in.prismar.library.common.logger.event.LogRecordEvent;
 import lombok.Setter;
 
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ public class DefaultLogger extends AbstractLogger {
     @Setter
     private SimpleDateFormat timeFormat;
 
+
     public DefaultLogger(String name, boolean includeTimestamp) {
         super(name);
         this.includeTimestamp = includeTimestamp;
@@ -37,6 +39,7 @@ public class DefaultLogger extends AbstractLogger {
 
     protected LogRecord record(LogLevel level, String message, Object... data) {
         LogRecord record = new LogRecord(level, String.format(message, data));
+        getEventBus().publish(new LogRecordEvent(record));
         return record;
     }
 }

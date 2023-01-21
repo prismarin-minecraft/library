@@ -1,5 +1,6 @@
 package in.prismar.library.common.logger;
 
+import in.prismar.library.common.event.EventBus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,8 @@ import java.io.StringWriter;
 public abstract class AbstractLogger implements Logger {
 
     private final String name;
+
+    private EventBus eventBus = new EventBus();
 
     @Override
     public LogRecord info(String message, Object... format) {
