@@ -1,6 +1,7 @@
 package in.prismar.library.spigot.raytrace;
 
 
+import com.google.common.base.Stopwatch;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitbox;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitboxFace;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitboxHelper;
@@ -13,6 +14,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -42,11 +44,10 @@ public class Raytrace {
     public RaytraceResult ray(double range) {
         if(hitboxes == null){
             this.hitboxes = RaytraceHitboxHelper.collectPossibleEntityHitboxes(origin, direction, range, 180);
-            this.hitboxes.addAll(RaytraceHitboxHelper.collectPossibleBlockHitboxes(origin, direction, range));
+            this.hitboxes.addAll(RaytraceHitboxHelper.collectPossibleBlockHitboxesProfessionalWay(origin, direction, range));
         }
         RaytraceResult result = new RaytraceResult();
         List<RaytraceHit> hits = new ArrayList<>();
-
         for(RaytraceHitbox hitbox : hitboxes) {
             RaytraceHitboxFace closestFace = null;
             double closestFaceDistance = range * range;
@@ -59,7 +60,7 @@ public class Raytrace {
                     // check if the intersection point lies on the positive direction
                     var delta = intersection.toVector().subtract(origin.toVector());
                     if(delta.dot(direction) < 0) {
-                    	continue;
+                        continue;
                     }
                     
                     if(distance <= closestFaceDistance) {
