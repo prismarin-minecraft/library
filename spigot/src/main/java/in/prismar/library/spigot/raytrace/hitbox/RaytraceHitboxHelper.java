@@ -63,7 +63,6 @@ public class RaytraceHitboxHelper {
             int i = Mth.floor(d3);
             int j = Mth.floor(d4);
             int k = Mth.floor(d5);
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(i, j, k);
             double d6 = d0 - d3;
             double d7 = d1 - d4;
             double d8 = d2 - d5;
@@ -94,7 +93,7 @@ public class RaytraceHitboxHelper {
                     d14 += d11;
                 }
 				Block block = origin.getWorld().getBlockAt(i, j, k);
-                if(block.getType().isOccluding()) {
+                if(block.getType().isOccluding() || block.getType().name().contains("GLASS")) {
 					hitboxes.add(new RaytraceBlockHitbox(block));
 				}
             }
