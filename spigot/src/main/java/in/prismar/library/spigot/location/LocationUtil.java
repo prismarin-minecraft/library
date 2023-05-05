@@ -38,4 +38,18 @@ public final class LocationUtil {
         StringBuilder builder = (new StringBuilder()).append(location.getWorld().getName()).append(";").append(location.getX()).append(";").append(location.getY()).append(";").append(location.getZ()).append(";").append(location.getYaw()).append(";").append(location.getPitch());
         return builder.toString();
     }
+
+    public static Location stringToLocationBlock(String stringLocation) {
+        String[] args = stringLocation.split("-");
+        World world = Bukkit.getWorld(args[0]);
+        int x = Double.valueOf(args[1]).intValue();
+        int y = Double.valueOf(args[2]).intValue();
+        int z = Double.valueOf(args[3]).intValue();
+        return new Location(world, x, y, z);
+    }
+
+    public static String locationToStringBlock(Location location) {
+        StringBuilder builder = (new StringBuilder()).append(location.getWorld().getName()).append("-").append(location.getBlockX()).append("-").append(location.getBlockY()).append("-").append(location.getBlockZ());
+        return builder.toString();
+    }
 }

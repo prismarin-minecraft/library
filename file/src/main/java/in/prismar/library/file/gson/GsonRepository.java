@@ -10,6 +10,7 @@ import lombok.Getter;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAsyncRepository<String, E> {
 
-    private String directory;
+    protected String directory;
     private Class<?> type;
     private ExceptionMapper mapper;
     private Map<String, GsonFileWrapper<E>> internalWrapperCache;
@@ -41,6 +42,10 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
     }
 
     public void loadAll() {
+        loadAll(null);
+    }
+
+    public void loadAll(Consumer<GsonFileWrapper<E>> loadCallback) {
         File folder = new File(directory);
         if(folder.exists()) {
             for(File file : folder.listFiles()) {
@@ -49,6 +54,9 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
                     wrapper.load();
                     internalWrapperCache.put(wrap(wrapper.getEntity().getId()), wrapper);
                     cache.put(wrap(wrapper.getEntity().getId()), wrapper.getEntity());
+                    if(loadCallback != null) {
+                        loadCallback.accept(wrapper);
+                    }
                 }
             }
         }
