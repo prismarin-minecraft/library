@@ -11,7 +11,7 @@ public class GsonDeserializerWithInheritance<T> implements JsonDeserializer<T> {
             JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        JsonPrimitive classNamePrimitive = (JsonPrimitive) jsonObject.get("type");
+        JsonPrimitive classNamePrimitive = (JsonPrimitive) jsonObject.get("class");
 
         String className = classNamePrimitive.getAsString();
         Class<?> clazz;
