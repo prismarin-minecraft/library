@@ -83,7 +83,7 @@ public abstract class HelpCommand<T extends CommandSender> extends SpigotCommand
             }
         }
         sender.sendMessage("§c");
-        sender.sendMessage(" " + arrow + "§8/" + baseColor + getName() + " §8<" + baseColor + "1§8/"+ baseColor + maxPage+"§8> §8(§3Current§8: " + baseColor + (page+1) + "§8)");
+        sender.sendMessage(" " + arrow + "§8/" + baseColor + getName() + " §8<" + baseColor + (page+1) + "§8/"+ baseColor + maxPage+"§8>");
         sender.sendMessage(lowerBorder);
     }
 

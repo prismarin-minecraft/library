@@ -40,7 +40,7 @@ public final class LocationUtil {
     }
 
     public static Location stringToLocationBlock(String stringLocation) {
-        String[] args = stringLocation.split("-");
+        String[] args = stringLocation.split("_");
         World world = Bukkit.getWorld(args[0]);
         int x = Double.valueOf(args[1]).intValue();
         int y = Double.valueOf(args[2]).intValue();
@@ -49,7 +49,10 @@ public final class LocationUtil {
     }
 
     public static String locationToStringBlock(Location location) {
-        StringBuilder builder = (new StringBuilder()).append(location.getWorld().getName()).append("-").append(location.getBlockX()).append("-").append(location.getBlockY()).append("-").append(location.getBlockZ());
+        StringBuilder builder = (new StringBuilder()).append(location.getWorld().getName()).append("_")
+                .append(location.getBlockX()).append("_")
+                .append(location.getBlockY()).append("_")
+                .append(location.getBlockZ());
         return builder.toString();
     }
 }
