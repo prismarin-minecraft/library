@@ -5,6 +5,7 @@ import com.bettercloud.vault.VaultConfig;
 import com.bettercloud.vault.VaultException;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,6 +39,22 @@ public class HashiCorpVaultAdapter implements VaultProvider {
         return null;
     }
 
+    @Override
+    @Nullable
+    public String setSecret(String category, String key, String value) {
+        Map<String, Object> map = new HashMap<>();
+        Map<String, String> store = getStore(category);
+        if(store != null) {
+            map.putAll(store);
+        }
+        map.put(key, value);
+        try {
+            this.vault.logical().write(path.concat(category), map);
+        } catch (VaultException e) {
+            return null;
+        }
+        return value;
+    }
 
     @Nullable
     public Map<String, String> getStore(String category) {

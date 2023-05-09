@@ -14,4 +14,7 @@ public interface VaultProvider {
 
     @Nullable
     String getSecret(String category, String key);
+
+    @Nullable
+    String setSecret(String category, String key, String value);
 }
