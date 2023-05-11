@@ -28,6 +28,8 @@ public class ItemBuilder {
 
     private ItemFlag[] flags;
 
+    private int amount = 1;
+
     public ItemBuilder(Material material) {
         this.material = material;
     }
@@ -36,6 +38,7 @@ public class ItemBuilder {
         this.material = stack.getType();
         if (stack.hasItemMeta()) {
             ItemMeta meta = stack.getItemMeta();
+            this.amount = stack.getAmount();
             if (meta.hasDisplayName()) {
                 this.name = meta.getDisplayName();
             }
@@ -131,6 +134,9 @@ public class ItemBuilder {
             meta.setCustomModelData(customModelData);
         }
         stack.setItemMeta(meta);
+        if(amount > 1) {
+            stack.setAmount(amount);
+        }
         return stack;
     }
 
