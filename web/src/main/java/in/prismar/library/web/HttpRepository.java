@@ -37,8 +37,13 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
         this.token = token;
         this.entityClass = entityClass;
         this.client = new OkHttpClient();
-        this.gson = new GsonBuilder().create();
+
+        GsonBuilder builder = new GsonBuilder();
+        intercept(builder);
+        this.gson = builder.create();
     }
+
+    public void intercept(GsonBuilder builder) {}
 
     @Override
     public E create(E entity) {
