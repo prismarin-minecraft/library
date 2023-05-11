@@ -60,6 +60,10 @@ public class ItemBuilder {
         }
     }
 
+    public ItemBuilder setAmount(int amount) {
+        this.amount = amount;
+        return this;
+    }
 
     public ItemBuilder glow() {
         addEnchantment(Enchantment.ARROW_DAMAGE, 1);
