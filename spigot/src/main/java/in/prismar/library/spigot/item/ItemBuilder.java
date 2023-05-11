@@ -36,9 +36,9 @@ public class ItemBuilder {
 
     public ItemBuilder(ItemStack stack) {
         this.material = stack.getType();
+        this.amount = stack.getAmount();
         if (stack.hasItemMeta()) {
             ItemMeta meta = stack.getItemMeta();
-            this.amount = stack.getAmount();
             if (meta.hasDisplayName()) {
                 this.name = meta.getDisplayName();
             }
