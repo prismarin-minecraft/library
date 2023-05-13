@@ -124,7 +124,7 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
         Request request = new Request.Builder()
                 .url(url.concat("/").concat(id.toString()))
                 .header("Authorization", token)
-                .get()
+                .delete()
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return gson.fromJson(response.body().string(), entityClass);
