@@ -69,11 +69,17 @@ public abstract class AbstractAsyncRepository<ID, E> implements Repository<ID, E
 
     @Override
     public CompletableFuture<E> deleteAsync(E entity) {
+        if(this.executor.hasTask(entity.toString())) {
+            this.executor.removeTask(entity.toString());
+        }
         return CompletableFuture.supplyAsync(() -> delete(entity), executor.getThreadPool());
     }
 
     @Override
     public CompletableFuture<E> deleteByIdAsync(ID id) {
+        if(this.executor.hasTask(id.toString())) {
+            this.executor.removeTask(id.toString());
+        }
         return CompletableFuture.supplyAsync(() -> deleteById(id), executor.getThreadPool());
     }
 }

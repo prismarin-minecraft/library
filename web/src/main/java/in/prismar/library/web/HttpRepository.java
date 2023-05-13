@@ -112,6 +112,8 @@ public class HttpRepository<ID, E extends RepositoryEntity<ID>> extends Abstract
         return create(entity);
     }
 
+
+
     @Override
     public E delete(E entity) {
         return deleteById(entity.getId());

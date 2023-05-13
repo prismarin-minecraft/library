@@ -3,6 +3,7 @@ package in.prismar.library.common.delayed;
 import in.prismar.library.common.delayed.worker.DelayedOperationWorker;
 import lombok.Getter;
 
+import java.util.Iterator;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,6 +68,17 @@ public class DelayedOperationExecutor<T extends DelayedOperation> {
             }
         }
         return false;
+    }
+
+    public void removeTask(String uniqueId) {
+        Iterator<T> iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            T operation = iterator.next();
+            if(operation.getUniqueId().equals(uniqueId)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 
     public void shutdown() {
