@@ -4,10 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import lombok.Getter;
 import net.minecraft.network.chat.ChatMessageContent;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
@@ -33,7 +30,7 @@ import java.util.List;
 public class HologramLine {
 
     private ArmorStand stand;
-    private final Location startLocation;
+    private Location startLocation;
     private HologramLineType type;
     private Object content;
 
@@ -68,6 +65,19 @@ public class HologramLine {
                 this.stand.setCustomNameVisible(false);
                 break;
         }
+    }
+
+    public void teleport(Player player, Location location) {
+        this.startLocation = location;
+        this.stand.setPos(location.getX(), location.getY(), location.getZ());
+        rotate(player, startLocation.getYaw(), startLocation.getPitch());
+        ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(stand);
+        sendPacket(player, packet);
+    }
+
+    public void rotate(Player player, float yaw, float pitch) {
+        stand.setYRot(yaw);
+        //stand.turn(yaw, pitch);
     }
 
     public void update(Player player, HologramLineType type, Object content) {

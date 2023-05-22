@@ -172,6 +172,21 @@ public class Hologram {
         }
     }
 
+    public void teleport(Location location) {
+        for(HologramViewer viewer : viewers.values()) {
+            Location current = location.clone();
+            for(HologramLine line : viewer.getLines()) {
+                line.teleport(viewer.getPlayer(), current);
+                double space = 0;
+                switch (line.getType()) {
+                    case TEXT -> space = HologramBootstrap.getInstance().getSpaceBetweenLineTexts();
+                    case ITEM_HEAD -> space = HologramBootstrap.getInstance().getSpaceBetweenLineHeads();
+                }
+                current = current.subtract(0, space, 0);
+            }
+        }
+    }
+
     protected void spawnLines(HologramViewer viewer) {
         if(!viewer.getLines().isEmpty()) {
             for(HologramLine line : viewer.getLines()) {
