@@ -1,7 +1,6 @@
 package in.prismar.library.spigot.raytrace;
 
 
-import com.google.common.base.Stopwatch;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitbox;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitboxFace;
 import in.prismar.library.spigot.raytrace.hitbox.RaytraceHitboxHelper;
@@ -14,7 +13,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (c) Maga, All Rights Reserved

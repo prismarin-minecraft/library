@@ -1,11 +1,9 @@
 package in.prismar.library.spigot.raytrace.hitbox;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -30,8 +28,8 @@ public class RaytraceHitboxHelper {
         final var minDotProduct = Math.cos(Math.toRadians(result));
         List<RaytraceHitbox> hitboxes = new ArrayList<>();
 
-        for (Player player : world.getPlayers()) {
-            Location location = player.getEyeLocation();
+        for (Player entity : world.getPlayers()) {
+            Location location = entity.getEyeLocation();
             if (location.distanceSquared(origin) <= rangeSqrt) {
                 double deltaX = location.getX() - origin.getX();
                 double deltaY = location.getY() - origin.getY();
@@ -40,9 +38,10 @@ public class RaytraceHitboxHelper {
                 double dot = targetDirection.dot(direction);
 
                 if (dot > minDotProduct) {
-                    hitboxes.add(new RaytraceEntityHitbox(player));
+                    hitboxes.add(new RaytraceEntityHitbox(entity));
                 }
             }
+
         }
         return hitboxes;
     }
