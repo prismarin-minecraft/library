@@ -1,5 +1,7 @@
 package in.prismar.library.spigot.hologram;
 
+import in.prismar.library.spigot.packet.PacketReader;
+import in.prismar.library.spigot.packet.PacketReaderListener;
 import lombok.Getter;
 import in.prismar.library.spigot.hologram.listener.HologramJoinListener;
 import in.prismar.library.spigot.hologram.listener.HologramQuitListener;
@@ -30,6 +32,8 @@ public class HologramBootstrap implements Runnable{
     private double spaceBetweenLineTexts;
     private double spaceBetweenLineHeads;
 
+    private PacketReader reader;
+
 
 
     public HologramBootstrap(Plugin plugin) {
@@ -40,6 +44,17 @@ public class HologramBootstrap implements Runnable{
         this.minSpawnDistance = 900;
         this.spaceBetweenLineTexts = 0.25;
         this.spaceBetweenLineHeads = 1.25;
+
+        this.reader = new PacketReader("Hologram", plugin, true);
+        this.reader.addListener(new PacketReaderListener() {
+            @Override
+            public boolean onPacket(Player player, Object packet) {
+                if(packet.getClass().getSimpleName().contains("Entity")) {
+                    System.out.println(packet.getClass().getSimpleName());
+                }
+                return true;
+            }
+        });
 
         Bukkit.getScheduler().runTaskTimer(plugin, this, 20, 20);
 
