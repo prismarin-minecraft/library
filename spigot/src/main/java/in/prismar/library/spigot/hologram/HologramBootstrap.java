@@ -1,15 +1,18 @@
 package in.prismar.library.spigot.hologram;
 
+import in.prismar.library.spigot.hologram.line.HologramLine;
 import in.prismar.library.spigot.packet.PacketReader;
 import in.prismar.library.spigot.packet.PacketReaderListener;
 import lombok.Getter;
 import in.prismar.library.spigot.hologram.listener.HologramJoinListener;
 import in.prismar.library.spigot.hologram.listener.HologramQuitListener;
 import lombok.Setter;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class HologramBootstrap implements Runnable{
 
     private PacketReader reader;
 
+    private final Class<?> packetInUseClass;
+    private final Field entityIdField;
+
 
 
     public HologramBootstrap(Plugin plugin) {
@@ -46,14 +52,40 @@ public class HologramBootstrap implements Runnable{
         this.spaceBetweenLineHeads = 1.25;
 
         this.reader = new PacketReader("Hologram", plugin, true);
-        this.reader.addListener(new PacketReaderListener() {
-            @Override
-            public boolean onPacket(Player player, Object packet) {
-                if(packet.getClass().getSimpleName().contains("Entity")) {
-                    System.out.println(packet.getClass().getSimpleName());
+
+        try {
+            this.packetInUseClass = Class.forName("net.minecraft.network.protocol.game.PacketPlayInUseEntity");
+            this.entityIdField = packetInUseClass.getDeclaredField("a");
+            this.entityIdField.setAccessible(true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        this.reader.addListener((player, packet) -> {
+            if(packet.getClass().getSimpleName().equals("PacketPlayInUseEntity")) {
+                if(this.entityIdField.canAccess(packet)) {
+                    try {
+                        int entityId = entityIdField.getInt(packet);
+                        for(Hologram hologram : getHolograms()) {
+                            if(hologram.getInteraction() == null) {
+                                continue;
+                            }
+                            if(!hologram.existsViewer(player)) {
+                                continue;
+                            }
+                            HologramViewer viewer = hologram.getViewer(player);
+                            for(HologramLine line : viewer.getLines()) {
+                                if(line.getStand().getId() == entityId) {
+                                    hologram.getInteraction().onInteract(player);
+                                    return true;
+                                }
+                            }
+                        }
+                    } catch (IllegalAccessException e) {
+                        System.out.println("There was an error while trying to get entity id");
+                    }
                 }
-                return true;
             }
+            return true;
         });
 
         Bukkit.getScheduler().runTaskTimer(plugin, this, 20, 20);

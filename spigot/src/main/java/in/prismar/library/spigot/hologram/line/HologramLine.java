@@ -44,6 +44,7 @@ public class HologramLine {
         this.content = content;
         this.small = small;
         createStand();
+
     }
 
     protected void createStand() {

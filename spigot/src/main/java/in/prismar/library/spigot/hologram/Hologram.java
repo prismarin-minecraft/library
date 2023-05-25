@@ -27,6 +27,7 @@ public class Hologram {
     private List<HologramPlaceholder> placeholders;
     private Map<UUID, HologramViewer> viewers;
     private List<HologramLineEntry> lines;
+    private HologramInteraction interaction;
 
     @Setter
     private boolean global;
@@ -44,6 +45,11 @@ public class Hologram {
         for(String line : lines) {
             this.lines.add(new HologramLineEntry(HologramLineType.TEXT, line, false));
         }
+    }
+
+    public Hologram interaction(HologramInteraction interaction) {
+        this.interaction = interaction;
+        return this;
     }
 
     public Hologram insertLine(int index, HologramLineType type, Object content) {
@@ -234,5 +240,10 @@ public class Hologram {
     public void clear() {
         despawnAll();
         viewers.clear();
+    }
+
+    public interface HologramInteraction {
+
+        void onInteract(Player player);
     }
 }
