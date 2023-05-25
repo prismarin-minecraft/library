@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -45,7 +46,7 @@ public class HologramBootstrap implements Runnable{
     public HologramBootstrap(Plugin plugin) {
         instance = this;
 
-        this.holograms = new ArrayList<>();
+        this.holograms = new CopyOnWriteArrayList<>();
 
         this.minSpawnDistance = 900;
         this.spaceBetweenLineTexts = 0.25;
