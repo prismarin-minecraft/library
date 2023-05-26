@@ -16,6 +16,7 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,12 @@ public class HologramLine {
                 this.stand.setCustomNameVisible(false);
                 break;
         }
+    }
+
+    public void move(Player player, Vector vector, float yaw, float pitch, boolean ground) {
+        ClientboundMoveEntityPacket.PosRot packet = new ClientboundMoveEntityPacket.PosRot(stand.getId(),
+                (short)vector.getX(), (short)vector.getY(), (short)vector.getZ(), (byte) yaw, (byte) pitch, ground);
+        sendPacket(player, packet);
     }
 
     public void teleport(Player player, Location location) {

@@ -10,6 +10,7 @@ import in.prismar.library.spigot.hologram.placeholder.HologramPlaceholder;
 import in.prismar.library.spigot.hologram.placeholder.HologramPlaceholderValue;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -179,6 +180,7 @@ public class Hologram {
     }
 
     public void teleport(Location location) {
+        this.location = location;
         for(HologramViewer viewer : viewers.values()) {
             Location current = location.clone();
             for(HologramLine line : viewer.getLines()) {
@@ -189,6 +191,15 @@ public class Hologram {
                     case ITEM_HEAD -> space = HologramBootstrap.getInstance().getSpaceBetweenLineHeads();
                 }
                 current = current.subtract(0, space, 0);
+            }
+        }
+    }
+
+    public void move(Vector vector, float yaw, float pitch, boolean ground) {
+        this.location = location.add(vector.getX(), vector.getY(), vector.getZ());
+        for(HologramViewer viewer : viewers.values()) {
+            for(HologramLine line : viewer.getLines()) {
+                line.move(viewer.getPlayer(), vector, yaw, pitch, ground);
             }
         }
     }
