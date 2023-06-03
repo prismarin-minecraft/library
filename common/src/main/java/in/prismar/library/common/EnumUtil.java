@@ -24,4 +24,12 @@ public final class EnumUtil {
         return result == null ? Optional.empty() : Optional.of(result);
     }
 
+    public static <T extends Enum> String[] getEnumNames(T[] types) {
+        String[] names = new String[types.length];
+        for (int i = 0; i < types.length; i++) {
+            names[i] = types[i].name();
+        }
+        return names;
+    }
+
 }

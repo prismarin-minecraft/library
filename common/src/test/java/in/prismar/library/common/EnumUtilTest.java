@@ -21,6 +21,12 @@ public class EnumUtilTest {
     }
 
     @Test
+    public void testNames() {
+        String[] names = EnumUtil.getEnumNames(TestEnum.values());
+        Assertions.assertEquals(TestEnum.values().length, names.length);
+    }
+
+    @Test
     public void testFailed() {
         Optional<TestEnum> optional = EnumUtil.getEnumByNameOptional(TestEnum.values(), "wrong_value");
         Assertions.assertEquals(false, optional.isPresent());
