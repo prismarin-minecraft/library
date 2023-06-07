@@ -36,6 +36,10 @@ public class SpigotCommandListener<T extends CommandSender> extends Command {
     @NotNull
     @Override
     public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        List<String> overrideTab = command.tab((T)sender, alias, args);
+        if(!overrideTab.isEmpty()) {
+            return overrideTab;
+        }
         List<String> list = new ArrayList<>();
         if (args.length >= 1) {
             check(list, args, command);

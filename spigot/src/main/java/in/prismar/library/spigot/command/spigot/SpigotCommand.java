@@ -8,6 +8,8 @@ import in.prismar.library.spigot.command.exception.impl.SenderException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -61,5 +63,9 @@ public abstract class SpigotCommand<T extends CommandSender> extends CommandNode
             }
         }
         return super.isSender(sender);
+    }
+
+    public List<String> tab(T sender, String alias, String[] args) {
+        return Collections.emptyList();
     }
 }
