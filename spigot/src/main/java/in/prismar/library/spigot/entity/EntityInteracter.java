@@ -24,27 +24,26 @@ import java.util.function.Consumer;
  **/
 public class EntityInteracter {
 
+    private static EntityInteracter instance;
+
     private final Plugin plugin;
 
     @Getter
     private final Map<Location, Consumer<Player>> interactions;
 
     public EntityInteracter(Plugin plugin) {
+        instance = this;
         this.plugin = plugin;
         this.interactions = new HashMap<>();
         Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(this), plugin);
     }
 
-    public void register(Entity entity, Consumer<Player> consumer) {
-        this.interactions.put(entity.getLocation(), consumer);
+    public static void register(Entity entity, Consumer<Player> consumer) {
+        instance.getInteractions().put(entity.getLocation(), consumer);
     }
 
-    public void unregister(Entity entity) {
-        this.interactions.remove(entity.getLocation());
-    }
-
-    public void unregister(Location location) {
-        this.interactions.remove(location);
+    public static void unregister(Location location) {
+        instance.getInteractions().remove(location);
     }
 
     @AllArgsConstructor
@@ -56,7 +55,7 @@ public class EntityInteracter {
         public void onCall(PlayerInteractEntityEvent event) {
             if (event.getHand() == EquipmentSlot.HAND) {
                 Entity entity = event.getRightClicked();
-                if(interacter.getInteractions().containsKey(entity.getLocation())) {
+                if (interacter.getInteractions().containsKey(entity.getLocation())) {
                     interacter.getInteractions().get(entity.getLocation()).accept(event.getPlayer());
                 }
             }
