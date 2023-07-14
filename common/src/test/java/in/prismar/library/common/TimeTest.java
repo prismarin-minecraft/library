@@ -19,5 +19,8 @@ public class TimeTest {
     public void test() {
         long seconds = 110;
         Assertions.assertEquals("01:50", TimeUtil.convertToTwoDigits(seconds));
+
+
     }
+
 }
