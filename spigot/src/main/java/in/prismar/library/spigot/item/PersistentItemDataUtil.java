@@ -66,4 +66,17 @@ public final class PersistentItemDataUtil {
         }
         return 0;
     }
+
+    public static boolean hasInteger(Plugin plugin, ItemStack stack, String key) {
+        ItemMeta meta = stack.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(!CACHED_KEYS.containsKey(key)) {
+            CACHED_KEYS.put(key, new NamespacedKey(plugin, key));
+        }
+        NamespacedKey namespacedKey = CACHED_KEYS.get(key);
+        if(container.has(namespacedKey, PersistentDataType.INTEGER)) {
+            return true;
+        }
+        return false;
+    }
 }
