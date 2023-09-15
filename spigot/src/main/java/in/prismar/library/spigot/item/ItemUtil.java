@@ -20,6 +20,48 @@ import java.util.List;
  **/
 public final class ItemUtil {
 
+    public static boolean compare(ItemStack primary, ItemStack second) {
+        if(primary.hasItemMeta()) {
+            if(primary.getItemMeta().hasDisplayName()) {
+                if(!second.hasItemMeta()) {
+                    return false;
+                }
+                if(!second.getItemMeta().hasDisplayName()) {
+                    return false;
+                }
+                return primary.getItemMeta().getDisplayName().equals(second.getItemMeta().getDisplayName());
+            }
+        }
+        return primary.getType() == second.getType();
+    }
+
+    public static boolean compareDeep(ItemStack primary, ItemStack second) {
+        if(primary.hasItemMeta()) {
+            if(primary.getItemMeta().hasDisplayName()) {
+                if(!second.hasItemMeta()) {
+                    return false;
+                }
+                if(!second.getItemMeta().hasDisplayName()) {
+                    return false;
+                }
+                if(primary.getItemMeta().hasLore()) {
+                    if(!second.getItemMeta().hasLore()) {
+                        return false;
+                    }
+                    int index = 0;
+                    for(String lore : primary.getItemMeta().getLore()) {
+                        if(!lore.equals(second.getItemMeta().getLore().get(index))) {
+                            return false;
+                        }
+                        index++;
+                    }
+                }
+                return primary.getItemMeta().getDisplayName().equals(second.getItemMeta().getDisplayName());
+            }
+        }
+        return primary.getType() == second.getType();
+    }
+
     public static void sendFakeMainHeadEquipment(Player player, ItemStack stack) {
         CraftPlayer craftPlayer = (CraftPlayer) player;
         ClientboundSetEquipmentPacket packet = new ClientboundSetEquipmentPacket(craftPlayer.getEntityId(), List
