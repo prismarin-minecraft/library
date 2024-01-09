@@ -1,6 +1,6 @@
 kind: pipeline
 type: kubernetes
-name: Deployment
+name: Pull request
 
 trigger:
   branch:
