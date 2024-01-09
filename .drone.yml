@@ -1,7 +1,6 @@
----
 kind: pipeline
-type: docker
-name: Pull request
+type: kubernetes
+name: Deployment
 
 trigger:
   branch:
@@ -10,23 +9,22 @@ trigger:
     - pull_request
 
 steps:
-  - name: nexus-authentication
+  - name: nexus-auth
     image: md5lukas/drone-mvn-settings
     settings:
       servers:
-        - id: prismarin
-          username: admin
+        - id: prismarin-private-maven-registry
+          username: drone-prismarin-user
       serverSecrets:
-        from_secret: NEXUS_CREDENTIALS
+        from_secret: NEXUS_PRIVATE_MAVEN_REGISTRY_CREDENTIALS
   - name: test
-    depends_on: [nexus-authentication]
-    image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
+    image: maven:3.9.6
+    depends_on: [nexus-auth]
     commands:
       - mvn test -B -s settings.xml
-
 ---
 kind: pipeline
-type: docker
+type: kubernetes
 name: Deployment
 
 trigger:
@@ -36,16 +34,16 @@ trigger:
     - push
 
 steps:
-  - name: nexus-authentication
+  - name: nexus-auth
     image: md5lukas/drone-mvn-settings
     settings:
       servers:
-        - id: prismarin
-          username: admin
+        - id: prismarin-private-maven-registry
+          username: drone-prismarin-user
       serverSecrets:
-        from_secret: NEXUS_CREDENTIALS
-  - name: test & deploy
-    depends_on: [nexus-authentication]
-    image: docker-public.prismar.in/minecraft/spigot-maven:1.19.2
+        from_secret: NEXUS_PRIVATE_MAVEN_REGISTRY_CREDENTIALS
+  - name: test-and-deploy
+    image: maven:3.9.6
+    depends_on: [nexus-auth]
     commands:
       - mvn deploy -B -s settings.xml
