@@ -18,7 +18,7 @@ steps:
       serverSecrets:
         from_secret: NEXUS_PRIVATE_MAVEN_REGISTRY_CREDENTIALS
   - name: test
-    image: maven:3.9.6
+    image: maven:3.8.6-eclipse-temurin-17-alpine
     depends_on: [nexus-auth]
     commands:
       - mvn test -B -s settings.xml
@@ -43,7 +43,7 @@ steps:
       serverSecrets:
         from_secret: NEXUS_PRIVATE_MAVEN_REGISTRY_CREDENTIALS
   - name: test-and-deploy
-    image: maven:3.9.6
+    image: maven:3.8.6-eclipse-temurin-17-alpine
     depends_on: [nexus-auth]
     commands:
       - mvn deploy -B -s settings.xml
