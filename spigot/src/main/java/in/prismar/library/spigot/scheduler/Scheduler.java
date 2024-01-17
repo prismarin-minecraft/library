@@ -35,6 +35,22 @@ public final class Scheduler {
         return Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, repeat);
     }
 
+    public static BukkitTask runTimer(long delay, long repeat, SchedulerRunnable runnable) {
+        Preconditions.checkNotNull(plugin, "Plugin was not set");
+        BukkitTask task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(runnable.isCancelled()) {
+                    cancel();
+                    return;
+                }
+                runnable.run();
+                runnable.setCurrentTicks(runnable.getCurrentTicks() + repeat);
+            }
+        }.runTaskTimer(plugin, delay, repeat);
+        return task;
+    }
+
     public static BukkitTask runTimerFor(long delay, long repeat, long forTicks, SchedulerRunnable runnable) {
         Preconditions.checkNotNull(plugin, "Plugin was not set");
         runnable.setCurrentTicks(forTicks);

@@ -18,7 +18,7 @@ public final class EntityUtil {
     public static Entity findNearestEntity(Location location, double range, Predicate<Entity> predicate) {
         Entity nearest = null;
         double currentRange = range * range;
-        for(Entity entity : location.getWorld().getEntities()) {
+        for(Entity entity : location.getWorld().getNearbyEntities(location, range, range, range, predicate)) {
             if(!predicate.test(entity)) {
                 continue;
             }

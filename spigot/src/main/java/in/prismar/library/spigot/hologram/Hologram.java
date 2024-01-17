@@ -89,7 +89,7 @@ public class Hologram {
                     HologramLine current = viewer.getLines().get(index);
                     current.update(viewer.getPlayer(), line.getType(), value);
                 }catch (Exception exception) {
-
+                    //Ignore
                 }
 
             }
