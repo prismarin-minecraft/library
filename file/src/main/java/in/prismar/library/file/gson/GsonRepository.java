@@ -107,6 +107,7 @@ public class GsonRepository<E extends StringRepositoryEntity> extends AbstractAs
             return Optional.of(this.cache.get(wrap(id)));
         }
         GsonFileWrapper<E> wrapper = createWrapper(id);
+        wrapper.load();
         if(wrapper.exists() && wrapper.getEntity() != null) {
             return Optional.of(wrapper.getEntity());
         }
