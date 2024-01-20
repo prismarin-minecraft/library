@@ -46,7 +46,7 @@ public class Distributor<T extends DistributionTask> {
         int workerScaledSize = getConfig().getScaleWorkersOnTaskSize() * getWorkers().size();
         if(increase) {
             if(overAllSize >= workerScaledSize && getWorkers().size() < config.getMaxWorkers()) {
-                lock.tryLock();
+                lock.lock();
                 createWorker();
                 lock.unlock();
             }
@@ -56,7 +56,7 @@ public class Distributor<T extends DistributionTask> {
             }
             workerScaledSize -= getConfig().getScaleWorkersOnTaskSize();
             if(overAllSize < workerScaledSize) {
-                lock.tryLock();
+                lock.lock();
                 try {
                     DistributorWorker<T> worker = deleteWorker();
                     if(worker != null) {
