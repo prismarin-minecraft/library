@@ -88,9 +88,14 @@ public class MetaRegistry {
             ClassPath classPath = ClassPath.from(loader);
             for(ClassPath.ClassInfo info : classPath.getTopLevelClasses()) {
                 if(info.getName().startsWith(packageName.concat("."))) {
-                    Class<?> target = info.load();
-                    scanned.add(target);
-                    run(MetaProcessorPhase.DISCOVERY, target);
+                    try {
+                        Class<?> target = info.load();
+                        scanned.add(target);
+                        run(MetaProcessorPhase.DISCOVERY, target);
+                    } catch (NoClassDefFoundError err) {
+                        System.out.println("Can't find class (Ignore if intended): " + err.getMessage());
+                    }
+
                 }
             }
             runPhase(MetaProcessorPhase.POST_DISCOVERY);
@@ -111,7 +116,12 @@ public class MetaRegistry {
         for(Map.Entry<Class<? extends Annotation>, List<MetaProcessor>> processorEntry : processors.entrySet()) {
             for(MetaProcessor processor : processorEntry.getValue()) {
                 if(processor.getPhase() ==  phase) {
-                    processor.process(target);
+                    try {
+                        processor.process(target);
+                    }catch (NoClassDefFoundError error) {
+                        System.out.println("Can't find class (Ignore if intended): " + error.getMessage());
+                    }
+
                 }
             }
         }
