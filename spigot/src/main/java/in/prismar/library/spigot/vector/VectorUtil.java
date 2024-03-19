@@ -1,6 +1,7 @@
 package in.prismar.library.spigot.vector;
 
 import in.prismar.library.common.math.MathUtil;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -12,8 +13,8 @@ import org.bukkit.util.Vector;
  **/
 public final class VectorUtil {
 
-    public static Vector getRandomizedDirection(Player player, double spread) {
-        Vector dir = player.getLocation().getDirection().normalize();
+    public static Vector getRandomizedDirection(Entity entity, double spread) {
+        Vector dir = entity.getLocation().getDirection().normalize();
         dir.setX(dir.getX() + getRandFactor(spread));
         dir.setY(dir.getY() + getRandFactor(spread));
         dir.setZ(dir.getZ() + getRandFactor(spread));
