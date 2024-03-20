@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Copyright (c) Maga, All Rights Reserved
@@ -26,40 +28,40 @@ public class FrameInventoryClickListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if(event.getCurrentItem() != null) {
-            if(event.getWhoClicked() instanceof Player player) {
-                if (bootstrap.getFrames().containsKey(player.getUniqueId())) {
-                    Frame frame = bootstrap.getFrames().get(player.getUniqueId());
-                    if(frame.getProperties().getFilling() != null) {
-                        if(event.getCurrentItem().isSimilar(frame.getProperties().getFilling())) {
-                            event.setCancelled(true);
-                            event.setResult(Event.Result.DENY);
-                            return;
-                        }
+        Player player = (Player) event.getWhoClicked();
+        if (bootstrap.getFrames().containsKey(player.getUniqueId())) {
+            Frame frame = bootstrap.getFrames().get(player.getUniqueId());
+            if (frame.getProperties().getFilling() != null) {
+                if(event.getCurrentItem() != null) {
+                    if (event.getCurrentItem().isSimilar(frame.getProperties().getFilling())) {
+                        event.setCancelled(true);
+                        event.setResult(Event.Result.DENY);
+                        return;
                     }
-                    if(!frame.getProperties().isAllowClick()) {
+                }
+            }
+            if (!frame.getProperties().isAllowClick()) {
+                event.setCancelled(true);
+                event.setResult(Event.Result.DENY);
+            }
+            frame.getEventBus().publish(new FrameClickEvent(frame, player, event));
+            if(event.getCurrentItem() != null) {
+                if (frame.getButtons().containsKey(event.getRawSlot())) {
+                    FrameButton button = frame.getButtons().get(event.getRawSlot());
+                    if (button.isCancelClick()) {
                         event.setCancelled(true);
                         event.setResult(Event.Result.DENY);
                     }
-
-                    frame.getEventBus().publish(new FrameClickEvent(frame, player, event));
-
-                    if(frame.getButtons().containsKey(event.getRawSlot())) {
-                        FrameButton button = frame.getButtons().get(event.getRawSlot());
-                        if(button.isCancelClick()) {
-                            event.setCancelled(true);
-                            event.setResult(Event.Result.DENY);
-                        }
-                        if(button.hasEvents()) {
-                            for(FrameButtonEvent buttonEvent : button.getEvents()) {
-                                if(buttonEvent instanceof ClickFrameButtonEvent clickFrameButtonEvent) {
-                                    clickFrameButtonEvent.onClick(player, event);
-                                }
+                    if (button.hasEvents()) {
+                        for (FrameButtonEvent buttonEvent : button.getEvents()) {
+                            if (buttonEvent instanceof ClickFrameButtonEvent clickFrameButtonEvent) {
+                                clickFrameButtonEvent.onClick(player, event);
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }
